@@ -382,15 +382,16 @@
     top: auto;
     bottom: 0;
     left: 0;
-    width: 100vw;
-    height: 60px;
-    background-color: rgba(10, 10, 10, 0.95);
-    backdrop-filter: blur(12px);
+    width: 100%;
+    height: 65px;
+    background-color: rgba(18, 18, 20, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-radius: 0;
     border: none;
     border-top: 1px solid var(--border-color);
     padding: 0;
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
     z-index: 100;
   }
 
@@ -400,9 +401,19 @@
     gap: 0;
   }
 
+  .navbar-item {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
   .navbar-link {
     font-size: 0.85rem;
-    padding: 5px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
   }
 }
 
@@ -1041,5 +1052,14 @@
 
   .timeline-item-divider {
     display: none;
+  }
+
+  .project-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .project-btn {
+    width: 100%;
   }
 }

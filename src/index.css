@@ -2,9 +2,9 @@
 
 :root {
   /* Theme Colors (Premium Minimalist Black & White) */
-  --bg-dark: #000000;
-  --bg-card: #0a0a0a;
-  --bg-card-hover: #121212;
+  --bg-dark: #08080a;
+  --bg-card: #121214;
+  --bg-card-hover: #1c1c1f;
   
   --accent-cyan: #ffffff;
   --accent-indigo: #737373;
@@ -16,10 +16,10 @@
   --text-muted: #525252;
   
   /* Borders and elements */
-  --border-color: #262626;
-  --border-hover: #404040;
-  --glass-bg: rgba(10, 10, 10, 0.9);
-  --glass-border: rgba(255, 255, 255, 0.05);
+  --border-color: #222225;
+  --border-hover: #333338;
+  --glass-bg: rgba(18, 18, 20, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.06);
   
   /* Fonts */
   --sans-font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
