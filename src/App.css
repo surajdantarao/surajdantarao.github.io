@@ -314,7 +314,7 @@
 @media (max-width: 1024px) {
   .main-content {
     padding: 24px;
-    padding-top: 80px;
+    padding-bottom: 80px; /* Space for sticky bottom navbar */
   }
 }
 
@@ -982,5 +982,64 @@
   .form-row {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+}
+
+/* ==========================================================================
+   MOBILE BACKDROP OVERLAY & RESPONSIVE PHONE GRID SCALINGS
+   ========================================================================== */
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 99;
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 16px;
+    padding-bottom: 80px; /* Space for bottom navbar */
+  }
+
+  .article-title {
+    font-size: 1.65rem;
+  }
+
+  .projects-grid,
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .project-card,
+  .skill-card {
+    width: 100%;
+  }
+
+  .timeline-list {
+    padding-left: 20px;
+  }
+
+  .timeline-list::before {
+    left: 7px;
+  }
+
+  .timeline-item::before {
+    left: -17px;
+  }
+
+  .timeline-item-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .timeline-item-divider {
+    display: none;
   }
 }
