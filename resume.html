@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Suraj Dantarao - Resume</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap');
+
+    @page {
+      size: letter;
+      margin: 0.22in 0.34in 0.18in 0.34in;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Source Serif 4', 'Georgia', 'Times New Roman', serif;
+      font-size: 7.9pt;
+      line-height: 1.16;
+      color: #111111;
+      background: #ffffff;
+    }
+
+    a {
+      color: #1a5276;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Header Styling */
+    .header {
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .header .name {
+      font-size: 18pt;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: #1a5276;
+      text-transform: uppercase;
+      margin-bottom: 1px;
+    }
+
+    .header .contact-line {
+      font-size: 8pt;
+      color: #222222;
+      margin-bottom: 1px;
+    }
+
+    .header .contact-line span {
+      margin: 0 4px;
+      color: #777777;
+    }
+
+    .header .links-line {
+      font-size: 8pt;
+      color: #1a5276;
+    }
+
+    .header .links-line span {
+      margin: 0 4px;
+      color: #777777;
+    }
+
+    /* Section Styling */
+    .section {
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-size: 9.1pt;
+      font-weight: 700;
+      color: #1a5276;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1.2px solid #1a5276;
+      padding-bottom: 1px;
+      margin-bottom: 2.5px;
+    }
+
+    .summary-text {
+      text-align: justify;
+      font-size: 7.8pt;
+      line-height: 1.18;
+      color: #222222;
+    }
+
+    /* Skills Table Layout */
+    .skills-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .skills-table tr {
+      vertical-align: top;
+    }
+
+    .skills-table td.skill-label {
+      font-weight: 700;
+      width: 125px;
+      padding-bottom: 1px;
+      color: #111111;
+      font-size: 7.8pt;
+    }
+
+    .skills-table td.skill-val {
+      padding-bottom: 1px;
+      color: #222222;
+      font-size: 7.8pt;
+    }
+
+    /* Experience / Project Entry Header */
+    .entry {
+      margin-bottom: 3px;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.2px;
+    }
+
+    .entry-title-box {
+      font-size: 8.2pt;
+    }
+
+    .entry-company {
+      font-weight: 700;
+      color: #111111;
+    }
+
+    .entry-role {
+      font-style: italic;
+      color: #333333;
+    }
+
+    .entry-date {
+      font-style: italic;
+      font-size: 7.8pt;
+      color: #333333;
+      white-space: nowrap;
+    }
+
+    .entry-location {
+      font-style: italic;
+      font-size: 7.6pt;
+      color: #444444;
+      margin-bottom: 0.5px;
+    }
+
+    .entry-tech {
+      font-style: italic;
+      color: #444444;
+      font-size: 7.7pt;
+      margin-left: 3px;
+    }
+
+    /* Bullet Points */
+    ul.bullets {
+      list-style-type: disc;
+      padding-left: 12px;
+      margin-top: 0.5px;
+    }
+
+    ul.bullets li {
+      font-size: 7.7pt;
+      line-height: 1.15;
+      margin-bottom: 0.8px;
+      color: #111111;
+      text-align: justify;
+    }
+
+    ul.bullets li b {
+      font-weight: 700;
+      color: #000000;
+    }
+
+    /* Education & Recognition */
+    .edu-entry {
+      margin-bottom: 2px;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .coursework {
+      font-size: 7.6pt;
+      font-style: italic;
+      color: #333333;
+      margin-top: 0.5px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="name">SURAJ DANTARAO</div>
+    <div class="contact-line">
+      Pune, Maharashtra, India <span>|</span> +91 8767753086 <span>|</span> surajdantrao0777@gmail.com
+    </div>
+    <div class="links-line">
+      <a href="https://linkedin.com/in/suraj-dantarao-b1b28b374">linkedin.com/in/suraj-dantarao-b1b28b374</a>
+      <span>|</span>
+      <a href="https://github.com/surajdantarao">github.com/surajdantarao</a>
+      <span>|</span>
+      <a href="https://surajdantarao.github.io">surajdantarao.github.io</a>
+    </div>
+  </div>
+
+  <!-- PROFESSIONAL SUMMARY -->
+  <div class="section">
+    <div class="section-title">Professional Summary</div>
+    <p class="summary-text">
+      Full Stack Developer & AI/ML Engineer with hands-on experience building practical web applications, AI-driven automation systems, and local LLM integrations. Proficient across Python, JavaScript/TypeScript, React.js, FastAPI, Node.js, MERN stack, and local AI agent workflows using Ollama. Specialized in end-to-end software architecture — from responsive frontend dashboard delivery to high-throughput REST APIs, database schema design, and automated workflow pipelines.
+    </p>
+  </div>
+
+  <!-- TECHNICAL SKILLS -->
+  <div class="section">
+    <div class="section-title">Technical Skills</div>
+    <table class="skills-table">
+      <tr>
+        <td class="skill-label">Languages:</td>
+        <td class="skill-val">Python | JavaScript | TypeScript | Java | C / C++ | SQL | HTML5 | CSS3</td>
+      </tr>
+      <tr>
+        <td class="skill-label">Backend:</td>
+        <td class="skill-val">FastAPI | Node.js | Express.js | Flask | RESTful APIs | Microservices | JWT | OAuth2</td>
+      </tr>
+      <tr>
+        <td class="skill-label">Frontend:</td>
+        <td class="skill-val">React.js | Angular | Redux | RxJS | HTML5 | CSS3 | Bootstrap | Tailwind CSS</td>
+      </tr>
+      <tr>
+        <td class="skill-label">AI / ML & Agents:</td>
+        <td class="skill-val">Machine Learning | Deep Learning | NLP | TensorFlow | PyTorch | OpenCV | Ollama | LLM Integration</td>
+      </tr>
+      <tr>
+        <td class="skill-label">Databases:</td>
+        <td class="skill-val">MongoDB | MySQL | SQLite | PostgreSQL | SQLAlchemy | NoSQL</td>
+      </tr>
+      <tr>
+        <td class="skill-label">DevOps & Cloud:</td>
+        <td class="skill-val">Git | GitHub | Docker | AWS Basics | CI/CD Pipelines | Google Cloud APIs (Gmail, Drive, Sheets)</td>
+      </tr>
+      <tr>
+        <td class="skill-label">Tools & Practices:</td>
+        <td class="skill-val">Postman | Vite | npm | REST APIs | System Design | Agile/Scrum | SDLC | OOP</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <div class="section">
+    <div class="section-title">Experience</div>
+    
+    <div class="entry">
+      <div class="entry-header">
+        <div class="entry-title-box">
+          <span class="entry-company">Whitecode Technologies / Whitecode AI</span>
+          <span>|</span>
+          <span class="entry-role">OJT / AI Software Engineering Intern</span>
+        </div>
+        <div class="entry-date">July 2026 – Present</div>
+      </div>
+      <div class="entry-location">Pune, MH</div>
+      <ul class="bullets">
+        <li>Architected and developed an <b>AI Mail Agent</b> leveraging <b>FastAPI</b>, <b>React.js</b>, and <b>Ollama local LLMs</b> — automating email ingestion, summarization, and response generation, cutting manual triage time by <b>65%</b>.</li>
+        <li>Built custom agent automation scripts using <b>OpenClaw wrappers</b> and integrated <b>Google APIs (Gmail, Sheets, Drive)</b> to construct zero-leakage enterprise document processing pipelines.</li>
+        <li>Designed high-throughput <b>FastAPI</b> server endpoints for async task routing, improving payload response speed by <b>35%</b>.</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <div class="entry-title-box">
+          <span class="entry-company">Esbee Company</span>
+          <span>|</span>
+          <span class="entry-role">Quality Line Operator</span>
+        </div>
+        <div class="entry-date">Jul 2023 – Apr 2024</div>
+      </div>
+      <div class="entry-location">Pune, MH</div>
+      <ul class="bullets">
+        <li>Conducted quality inspections and recorded defect data across assembly lines to maintain product compliance and optimize yield.</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <div class="entry-title-box">
+          <span class="entry-company">Delta Fire Company</span>
+          <span>|</span>
+          <span class="entry-role">Maintenance Technician</span>
+        </div>
+        <div class="entry-date">Jan 2022 – Jun 2022</div>
+      </div>
+      <div class="entry-location">Pune, MH</div>
+      <ul class="bullets">
+        <li>Maintained service logs and inspection data for fire safety systems using preventive maintenance checklists and fault diagnosis.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="section">
+    <div class="section-title">Projects</div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <div class="entry-title-box">
+          <span class="entry-company">AI Mail Agent</span>
+          <span class="entry-tech">Python | FastAPI | React | Ollama | Local LLMs | Google APIs</span>
+        </div>
+        <div class="entry-date"><a href="https://github.com/surajdantarao/AI-Mail-agent" target="_blank">GitHub Link</a></div>
+      </div>
+      <ul class="bullets">
+        <li>Engineered an offline-capable AI mail assistant parsing email streams and generating context-aware responses with <b>Ollama LLMs</b>.</li>
+        <li>Integrated <b>Google APIs (Gmail, Sheets, Drive)</b> for zero-data-leakage triage and automated spreadsheet logging.</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <div class="entry-title-box">
+          <span class="entry-company">MK27 Gym Management System</span>
+          <span class="entry-tech">MongoDB | Express.js | React | Node.js | JWT | bcrypt</span>
+        </div>
+        <div class="entry-date">
+          <a href="https://mk-27-gym.vercel.app/" target="_blank">Live Demo</a> <span>|</span>
+          <a href="https://github.com/surajdantarao/MK27-GYM" target="_blank">GitHub Link</a>
+        </div>
+      </div>
+      <ul class="bullets">
+        <li>Built a full-stack MERN application for managing member subscriptions, billing ledgers, joining dates, and automated member status.</li>
+        <li>Implemented secure user authentication with <b>JWT</b> and <b>bcrypt</b>, enforcing role-based access control and cutting query response time by <b>40%</b>.</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <div class="entry-title-box">
+          <span class="entry-company">Spam Detection System</span>
+          <span class="entry-tech">Python | Flask | Scikit-learn | NLP | TF-IDF | Naive Bayes</span>
+        </div>
+        <div class="entry-date"><a href="https://github.com/surajdantarao/spamdetection" target="_blank">GitHub Link</a></div>
+      </div>
+      <ul class="bullets">
+        <li>Built an ML-based web application to classify SMS messages as spam/ham using <b>Naive Bayes classification</b> with <b>TF-IDF vectorization</b>, achieving <b>~97% accuracy</b>.</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <div class="entry-title-box">
+          <span class="entry-company">QR-Based Hyperlocal Store Platform (QR Store)</span>
+          <span class="entry-tech">Python | Flask | SQLite | SQLAlchemy | JavaScript | React</span>
+        </div>
+        <div class="entry-date"><a href="https://github.com/surajdantarao/qr-store" target="_blank">GitHub Link</a></div>
+      </div>
+      <ul class="bullets">
+        <li>Developed a QR-based digital storefront platform for local shopkeepers featuring seller dashboards and real-time order management.</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <div class="entry-title-box">
+          <span class="entry-company">Guest Lecture & Visitor Management System</span>
+          <span class="entry-tech">Node.js | React | MySQL | Express.js</span>
+        </div>
+        <div class="entry-date"><a href="https://github.com/surajdantarao/guest-leacture" target="_blank">GitHub Link</a></div>
+      </div>
+      <ul class="bullets">
+        <li>Built a digital system to track visitor entries, schedule guest lectures, store speaker profiles, and archive feedback logs.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="section">
+    <div class="section-title">Education</div>
+
+    <div class="edu-entry">
+      <div class="entry-header">
+        <div class="entry-title-box">
+          <span class="entry-company">Ratan Tata Maharashtra State Skills University (RTMSSU), Pune</span>
+        </div>
+        <div class="entry-date">2024 – Present (Pursuing)</div>
+      </div>
+      <div class="entry-header">
+        <div class="entry-role">B.Tech in Computer Technology | CGPA: 5.9</div>
+        <div class="entry-location">Pune, Maharashtra, India</div>
+      </div>
+    </div>
+
+    <div class="edu-entry" style="margin-top: 2px;">
+      <div class="entry-header">
+        <div class="entry-title-box">
+          <span class="entry-company">Zeal Polytechnic College, Pune</span>
+        </div>
+        <div class="entry-date">2020 – 2023</div>
+      </div>
+      <div class="entry-header">
+        <div class="entry-role">MSBTE (Computer Engineering) | 72.97%</div>
+        <div class="entry-location">Pune, MH</div>
+      </div>
+      <div class="coursework">
+        Relevant Coursework: Data Structures & Algorithms, DBMS, Operating Systems, Web Technologies, OOP, Software Engineering.
+      </div>
+    </div>
+  </div>
+
+  <!-- CERTIFICATIONS & ACCOLADES -->
+  <div class="section">
+    <div class="section-title">Certifications & Accolades</div>
+    <ul class="bullets">
+      <li><b>Artificial Intelligence</b> — Information Technology Specialist | Certiport <i>(Feb 28, 2025)</i></li>
+      <li><b>Code Without Barriers: Ethical AI Practice</b> — Microsoft <i>(Feb/Mar 2025)</i></li>
+      <li><b>Deep Learning with Certification</b> <i>(Nov 12, 2025)</i></li>
+      <li><b>Whitecode AI Recognition:</b> Developed production-grade AI agent prototypes selected for live deployment at Whitecode AI.</li>
+      <li><b>Languages Known:</b> English, Hindi, Marathi</li>
+    </ul>
+  </div>
+
+</body>
+</html>
