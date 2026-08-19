@@ -23,30 +23,6 @@ const ResumePage = () => {
         </a>
       </header>
 
-      {/* Embedded PDF Viewer Section */}
-      <section className="pdf-viewer-section" style={{ marginTop: '25px', marginBottom: '35px' }}>
-        <div style={{
-          position: 'relative',
-          width: '100%',
-          borderRadius: '12px',
-          overflow: 'hidden',
-          border: '1px solid var(--border-color, #262626)',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-          backgroundColor: '#1e1e1e'
-        }}>
-          <iframe
-            src={`${personalData.resumePath}?v=2#toolbar=0&navpanes=0`}
-            title="Suraj Dantarao Resume PDF"
-            width="100%"
-            height="850px"
-            style={{
-              border: 'none',
-              display: 'block',
-              backgroundColor: '#ffffff'
-            }}
-          />
-        </div>
-      </section>
 
       {/* Experience Timeline */}
       <section className="timeline-section" style={{ marginTop: '30px' }}>
