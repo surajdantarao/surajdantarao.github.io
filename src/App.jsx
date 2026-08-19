@@ -1,36 +1,52 @@
-import { useState } from 'react'
-import Sidebar from './components/Sidebar'
 import Navbar from './components/Navbar'
+import Hero from './components/Hero'
 import About from './components/About'
-import ResumePage from './components/ResumePage'
-import Projects from './components/Projects'
 import Skills from './components/Skills'
+import Projects from './components/Projects'
+import ResumePage from './components/ResumePage'
 import Contact from './components/Contact'
+import Footer from './components/Footer'
 import './App.css'
 
 function App() {
-  const [activeTab, setActiveTab] = useState('about')
-
   return (
-    <main className="dashboard-container">
-      {/* Sidebar profile sheet */}
-      <Sidebar />
+    <div className="portfolio-app">
+      {/* Sticky Header Navigation */}
+      <Navbar />
 
-      {/* Main content display */}
-      <div className="main-content">
-        {/* Navigation header tabs */}
-        <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      {/* Main Top-Down Sections */}
+      <main className="portfolio-container">
+        <Hero />
+        
+        <div className="section-divider"></div>
+        <section id="about" className="scroll-section">
+          <About />
+        </section>
 
-        {/* Dynamic page content */}
-        <article className="content-page animate-fade-in">
-          {activeTab === 'about' && <About />}
-          {activeTab === 'resume' && <ResumePage />}
-          {activeTab === 'projects' && <Projects />}
-          {activeTab === 'skills' && <Skills />}
-          {activeTab === 'contact' && <Contact />}
-        </article>
-      </div>
-    </main>
+        <div className="section-divider"></div>
+        <section id="skills" className="scroll-section">
+          <Skills />
+        </section>
+
+        <div className="section-divider"></div>
+        <section id="projects" className="scroll-section">
+          <Projects />
+        </section>
+
+        <div className="section-divider"></div>
+        <section id="resume" className="scroll-section">
+          <ResumePage />
+        </section>
+
+        <div className="section-divider"></div>
+        <section id="contact" className="scroll-section">
+          <Contact />
+        </section>
+      </main>
+
+      {/* Global Footer */}
+      <Footer />
+    </div>
   )
 }
 
