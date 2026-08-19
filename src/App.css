@@ -683,7 +683,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   position: relative;
 }
@@ -697,12 +697,17 @@
   height: 3px;
   background-color: var(--text-white);
   opacity: 0.8;
+  transition: opacity 0.3s ease;
 }
 
 .project-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--border-hover);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+  transform: translateY(-8px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 12px 30px rgba(255, 255, 255, 0.03), 0 20px 45px rgba(0, 0, 0, 0.7);
+}
+
+.project-card:hover::before {
+  opacity: 1;
 }
 
 .project-body {
@@ -717,6 +722,24 @@
   margin-bottom: 12px;
   color: var(--text-white);
   font-weight: 700;
+  position: relative;
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.project-title::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--text-white);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-card:hover .project-title::after {
+  width: 100%;
 }
 
 .project-desc {
@@ -797,7 +820,18 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
+}
+
+.project-btn svg {
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Wobble Github icon on primary button hover */
+@keyframes github-wobble {
+  0%, 100% { transform: scale(1.1) rotate(0deg); }
+  25% { transform: scale(1.1) rotate(-8deg); }
+  75% { transform: scale(1.1) rotate(8deg); }
 }
 
 .project-btn-primary {
@@ -809,7 +843,11 @@
 .project-btn-primary:hover {
   background-color: #000000;
   color: #ffffff;
-  transform: translateY(-1px);
+  border-color: #ffffff;
+}
+
+.project-btn-primary:hover svg {
+  animation: github-wobble 0.4s ease-in-out infinite alternate;
 }
 
 .project-btn-accent {
@@ -822,7 +860,10 @@
   background-color: #ffffff;
   color: #000000;
   border-color: #ffffff;
-  transform: translateY(-1px);
+}
+
+.project-btn-accent:hover svg {
+  transform: scale(1.15) translate(2px, -2px);
 }
 
 /* ==========================================================================
