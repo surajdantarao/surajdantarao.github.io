@@ -51,6 +51,34 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
+}
+
+/* Background Glowing Nebulae (Left-Top Indigo/Purple and Right-Bottom Cyan) */
+body::before {
+  content: '';
+  position: fixed;
+  top: -15%;
+  left: -15%;
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.09) 0%, transparent 70%);
+  filter: blur(120px);
+  z-index: -10;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -15%;
+  right: -15%;
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.09) 0%, transparent 70%);
+  filter: blur(120px);
+  z-index: -10;
+  pointer-events: none;
 }
 
 /* Scroll Offset for Anchors */
