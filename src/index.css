@@ -1,14 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  /* Theme Colors (Premium Minimalist Black & White) */
-  --bg-dark: #08080a;
-  --bg-card: #121214;
-  --bg-card-hover: #1c1c1f;
+  /* Theme Colors (Vibrant Futuristic Neon Gradient Theme) */
+  --bg-dark: #07070a;
+  --bg-card: #101015;
+  --bg-card-hover: #181822;
   
-  --accent-cyan: #ffffff;
-  --accent-indigo: #737373;
-  --accent-teal: #ffffff;
+  --accent-cyan: #06b6d4;      /* Cyan-500 */
+  --accent-indigo: #6366f1;    /* Indigo-500 */
+  --accent-teal: #10b981;      /* Emerald-500 */
+  --accent-purple: #8b5cf6;    /* Purple-500 */
+  --accent-gradient: linear-gradient(135deg, var(--accent-indigo) 0%, var(--accent-cyan) 100%);
+  --accent-gradient-hover: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-cyan) 100%);
   
   /* Text colors */
   --text-white: #ffffff;
@@ -16,10 +19,10 @@
   --text-muted: #525252;
   
   /* Borders and elements */
-  --border-color: #222225;
-  --border-hover: #333338;
-  --glass-bg: rgba(18, 18, 20, 0.9);
-  --glass-border: rgba(255, 255, 255, 0.06);
+  --border-color: #22222d;
+  --border-hover: #4f46e5;     /* Glowing Indigo */
+  --glass-bg: rgba(16, 16, 21, 0.9);
+  --glass-border: rgba(99, 102, 241, 0.15);
   
   /* Fonts */
   --sans-font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;

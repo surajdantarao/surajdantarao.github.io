@@ -11,8 +11,9 @@ export const personalData = {
   portfolio: 'https://surajdantarao.github.io',
   resumePath: '/resume.pdf',
   bioParagraphs: [
-    'Aspiring AI and Full Stack Developer with hands-on experience in Python, Machine Learning, NLP, Flask, SQL, and AI-powered web applications. Built real-world projects including a Spam Detection System (~97% accuracy), AI Mail Agent, and MK27 Gym Management System.',
-    'Passionate about Machine Learning, agent automation, and solving business problems through intelligent software solutions.'
+    'I am an Aspiring AI and Full Stack Developer dedicated to building intelligent, high-impact web applications. Drawing on my B.Tech studies in Computer Technology, I combine robust backend systems (Flask, FastAPI, Node.js) with machine learning pipelines to solve real-world automation challenges.',
+    'I have engineered end-to-end solutions including an AI Mail Agent that automates email processing using local LLMs (Ollama) and Google APIs, a Spam Detection System that achieves a ~97% accuracy rate using NLP preprocessing and Naive Bayes, and a full-stack MERN Gym Management System that cuts billing query times by 40%.',
+    'I am passionate about local agent automation, NLP, and model optimization. I thrive in developer environments where I can leverage machine learning and full-stack software development to build production-grade prototypes that drive operational efficiency.'
   ]
 }
 
@@ -87,6 +88,7 @@ export const projectsData = [
     name: 'AI Mail Agent',
     description: 'An AI-powered mail assistant that parses email streams, performs automatic summarization, and generates draft responses using Ollama local LLMs.',
     technologies: ['Python', 'FastAPI', 'React.js', 'Ollama', 'Local LLMs', 'Google APIs'],
+    image: '/mail_agent.jpg',
     features: [
       'Engineered an offline-capable AI mail assistant using FastAPI and Ollama local LLMs.',
       'Integrated Google APIs (Gmail, Sheets, Drive) for zero-data-leakage triage.'
@@ -99,6 +101,7 @@ export const projectsData = [
     name: 'MK27 Gym Management System',
     description: 'A full-stack MERN web application for managing gym member lifecycle, plan subscriptions, billing ledgers, joining dates, and membership status tracking.',
     technologies: ['MongoDB', 'Express.js', 'React.js', 'Node.js', 'JWT', 'bcrypt'],
+    image: '/gym_system.jpg',
     features: [
       'Built a full-stack MERN web application for managing gym member lifecycle, plan subscriptions, billing ledgers, joining dates, and membership status tracking.',
       'Implemented secure user authentication and authorization using JWT and bcrypt, enforcing strict role-based access control across admin and member portals.',
@@ -112,6 +115,7 @@ export const projectsData = [
     name: 'Spam Detection System',
     description: 'An ML-based web app to classify SMS messages as spam/ham using Naive Bayes with TF-IDF vectorization and NLP preprocessing, achieving ~97% accuracy.',
     technologies: ['Python', 'Flask', 'Scikit-learn', 'NLP', 'TF-IDF', 'Naive Bayes'],
+    image: '/spam_detection.jpg',
     features: [
       'Built an ML-based web app to classify SMS as spam/ham using Naive Bayes classification.',
       'Applied TF-IDF vectorization and NLP preprocessing.',
@@ -125,6 +129,7 @@ export const projectsData = [
     name: 'QR-Based Hyperlocal Store Platform',
     description: 'A QR-based digital store platform built with Python, Flask, SQLite, SQLAlchemy, and JavaScript for local shopkeepers with seller dashboards.',
     technologies: ['Python', 'Flask', 'SQLite', 'SQLAlchemy', 'JavaScript', 'React'],
+    image: '/qr_store.jpg',
     features: [
       'Developed a QR-based digital store platform for local shopkeepers.',
       'Implemented seller dashboard with real-time order management.'
@@ -137,6 +142,7 @@ export const projectsData = [
     name: 'Guest Lecture & Visitor Management System',
     description: 'A digital system to manage guest speaker events, visitor entries, lecturer profiles, and feedback logs.',
     technologies: ['Node.js', 'React.js', 'MySQL', 'Express.js'],
+    image: '/guest_lecture.jpg',
     features: [
       'Built a system to manage guest lectures and visitor entries digitally.',
       'Implemented entry tracking, scheduling, and record management.'

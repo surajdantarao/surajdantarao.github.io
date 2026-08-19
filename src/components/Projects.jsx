@@ -13,6 +13,11 @@ const Projects = () => {
             key={project.id}
             className="project-card"
           >
+            {project.image && (
+              <div className="project-image-box">
+                <img src={project.image} alt={project.name} className="project-image" />
+              </div>
+            )}
             <div className="project-body">
               <h3 className="project-title">{project.name}</h3>
               <p className="project-desc">{project.description}</p>
