@@ -9,7 +9,7 @@ const Resume = () => {
           Feel free to download my complete resume for a detailed view of my skills, coursework, and projects.
         </p>
         <a
-          href={personalData.resumePath}
+          href={`${personalData.resumePath}?v=2`}
           target="_blank"
           rel="noopener noreferrer"
           className="btn btn-primary"

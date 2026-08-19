@@ -7,7 +7,7 @@ const ResumePage = () => {
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
         <h2 className="article-title" style={{ margin: 0 }}>Resume</h2>
         <a
-          href={personalData.resumePath}
+          href={`${personalData.resumePath}?v=2`}
           download="Suraj_Dantarao_Resume.pdf"
           target="_blank"
           rel="noopener noreferrer"
@@ -35,7 +35,7 @@ const ResumePage = () => {
           backgroundColor: '#1e1e1e'
         }}>
           <iframe
-            src={`${personalData.resumePath}#toolbar=0&navpanes=0`}
+            src={`${personalData.resumePath}?v=2#toolbar=0&navpanes=0`}
             title="Suraj Dantarao Resume PDF"
             width="100%"
             height="850px"
