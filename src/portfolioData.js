@@ -1,8 +1,8 @@
 // Personal and Contact details for Suraj Dantarao
 export const personalData = {
   name: 'Suraj Dantarao',
-  role: 'Aspiring AI & Full Stack Developer',
-  subtitle: 'B.Tech Computer Technology | Aspiring AI & Full Stack Developer',
+  role: 'AI & Full Stack Developer',
+  subtitle: 'B.Tech Computer Technology | AI & Full Stack Developer',
   location: 'Pune, Maharashtra, India',
   phone: '+91 8767753086',
   email: 'surajdantrao0777@gmail.com',
@@ -11,7 +11,7 @@ export const personalData = {
   portfolio: 'https://surajdantarao.github.io',
   resumePath: '/resume.pdf',
   bioParagraphs: [
-    'I am an Aspiring AI and Full Stack Developer dedicated to building intelligent, high-impact web applications. Drawing on my B.Tech studies in Computer Technology, I combine robust backend systems (Flask, FastAPI, Node.js) with machine learning pipelines to solve real-world automation challenges.',
+    'I am an AI and Full Stack Developer dedicated to building intelligent, high-impact web applications. Drawing on my B.Tech studies in Computer Technology, I combine robust backend systems (Flask, FastAPI, Node.js) with machine learning pipelines to solve real-world automation challenges.',
     'I have engineered end-to-end solutions including an AI Mail Agent that automates email processing using local LLMs (Ollama) and Google APIs, a Spam Detection System that achieves a ~97% accuracy rate using NLP preprocessing and Naive Bayes, and a full-stack MERN Gym Management System that cuts billing query times by 40%.',
     'I am passionate about local agent automation, NLP, and model optimization. I thrive in developer environments where I can leverage machine learning and full-stack software development to build production-grade prototypes that drive operational efficiency.'
   ]
