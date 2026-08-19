@@ -3,7 +3,6 @@ import Hero from './components/Hero'
 import About from './components/About'
 import Skills from './components/Skills'
 import Projects from './components/Projects'
-import ResumePage from './components/ResumePage'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import './App.css'
@@ -31,11 +30,6 @@ function App() {
         <div className="section-divider"></div>
         <section id="projects" className="scroll-section">
           <Projects />
-        </section>
-
-        <div className="section-divider"></div>
-        <section id="resume" className="scroll-section">
-          <ResumePage />
         </section>
 
         <div className="section-divider"></div>

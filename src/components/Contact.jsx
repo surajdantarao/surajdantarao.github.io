@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { personalData } from '../portfolioData'
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -17,7 +16,7 @@ const Contact = () => {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!formData.name || !formData.email || !formData.message) {
       setStatus({ type: 'error', text: 'Please fill out all form fields.' })
@@ -27,15 +26,42 @@ const Contact = () => {
     setLoading(true)
     setStatus({ type: '', text: '' })
 
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false)
-      setStatus({
-        type: 'success',
-        text: `Thank you for reaching out! (Note: This is a frontend demo. To connect, please send a message directly to ${personalData.email}.)`,
+    try {
+      const response = await fetch('https://formspree.io/surajdantrao0777@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _subject: `New Portfolio Message from ${formData.name}`,
+        }),
       })
-      setFormData({ name: '', email: '', message: '' })
-    }, 1000)
+
+      if (response.ok) {
+        setStatus({
+          type: 'success',
+          text: 'Thank you! Your message has been sent successfully. (Note: If this is the first submission, Formspree will email you to activate forwarding—please check your email to verify.)',
+        })
+        setFormData({ name: '', email: '', message: '' })
+      } else {
+        setStatus({
+          type: 'error',
+          text: 'An error occurred while sending your message. Please try again or email me directly.',
+        })
+      }
+    } catch (err) {
+      console.error('Email submission error:', err)
+      setStatus({
+        type: 'error',
+        text: 'Unable to connect to the email server. Please check your network and try again.',
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
