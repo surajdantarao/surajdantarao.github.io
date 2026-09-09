@@ -11,7 +11,8 @@ const __dirname = path.dirname(__filename);
     const htmlPath = path.join(__dirname, 'resume.html');
     const publicPdfPath = path.join(__dirname, 'public', 'resume.pdf');
     const distPdfPath = path.join(__dirname, 'dist', 'resume.pdf');
-    const artifactPdfPath = 'C:\\Users\\suraj\\.gemini\\antigravity\\brain\\ef34d608-ae38-41ff-874c-4190a11cb0c7\\Suraj_Dantarao_Resume.pdf';
+    const rootPdfPath = path.join(__dirname, 'Suraj_Dantarao_Resume.pdf');
+    const artifactPdfPath = 'C:\\Users\\suraj\\.gemini\\antigravity\\brain\\4f7cf237-0a33-4902-892c-d520733ffe76\\Suraj_Dantarao_Resume.pdf';
 
     console.log('Launching browser using Edge executable...');
     const browser = await puppeteer.launch({
@@ -33,11 +34,16 @@ const __dirname = path.dirname(__filename);
 
     await browser.close();
 
-    // Copy to dist and artifact folders
+    // Copy to dist, root, and artifact folders
     if (!fs.existsSync(path.join(__dirname, 'dist'))) {
       fs.mkdirSync(path.join(__dirname, 'dist'), { recursive: true });
     }
+    const artifactDir = path.dirname(artifactPdfPath);
+    if (!fs.existsSync(artifactDir)) {
+      fs.mkdirSync(artifactDir, { recursive: true });
+    }
     fs.copyFileSync(publicPdfPath, distPdfPath);
+    fs.copyFileSync(publicPdfPath, rootPdfPath);
     fs.copyFileSync(publicPdfPath, artifactPdfPath);
 
     console.log('PDF generated successfully at:', publicPdfPath);

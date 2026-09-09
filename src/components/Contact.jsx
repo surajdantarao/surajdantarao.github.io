@@ -19,7 +19,7 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!formData.name || !formData.email || !formData.message) {
-      setStatus({ type: 'error', text: 'Please fill out all form fields.' })
+      setStatus({ type: 'error', text: 'Please fill out all fields.' })
       return
     }
 
@@ -37,27 +37,27 @@ const Contact = () => {
           name: formData.name,
           email: formData.email,
           message: formData.message,
-          _subject: `New Portfolio Message from ${formData.name}`,
+          _subject: `Portfolio Contact from ${formData.name}`,
         }),
       })
 
       if (response.ok) {
         setStatus({
           type: 'success',
-          text: 'Thank you! Your message has been sent successfully. (Note: If this is the first submission, Formspree will email you to activate forwarding—please check your email to verify.)',
+          text: 'Thank you! Your message has been sent successfully.',
         })
         setFormData({ name: '', email: '', message: '' })
       } else {
         setStatus({
           type: 'error',
-          text: 'An error occurred while sending your message. Please try again or email me directly.',
+          text: 'There was an issue sending your message. Please email me directly.',
         })
       }
     } catch (err) {
-      console.error('Email submission error:', err)
+      console.error('Submission error:', err)
       setStatus({
         type: 'error',
-        text: 'Unable to connect to the email server. Please check your network and try again.',
+        text: 'Unable to connect to the mail server. Please try again later.',
       })
     } finally {
       setLoading(false)
@@ -65,90 +65,94 @@ const Contact = () => {
   }
 
   return (
-    <div className="contact-tab-container">
+    <article className="contact active" data-page="contact">
       <header>
-        <h2 className="article-title">Contact</h2>
+        <h2 className="h2 article-title">Contact</h2>
       </header>
 
-      {/* Form Card */}
-      <div className="contact-form-card" style={{ marginTop: '30px', background: 'none', border: 'none', padding: '0', boxShadow: 'none' }}>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="name" className="form-label">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="form-input"
-                placeholder="Your Name"
-                disabled={loading}
-              />
-            </div>
+      {/* Mapbox */}
+      <section className="mapbox" data-mapbox>
+        <figure>
+          <iframe
+            src="https://maps.google.com/maps?q=pune%20maharashtra&t=m&z=12&ie=UTF8&iwloc=&output=embed"
+            width="400"
+            height="300"
+            loading="lazy"
+            title="Google Map of Pune, Maharashtra"
+          ></iframe>
+        </figure>
+      </section>
 
-            <div className="form-group">
-              <label htmlFor="email" className="form-label">
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="form-input"
-                placeholder="your.email@example.com"
-                disabled={loading}
-              />
-            </div>
-          </div>
+      {/* Contact Form */}
+      <section className="contact-form">
+        <h3 className="h3 form-title">Contact Form</h3>
 
-          <div className="form-group">
-            <label htmlFor="message" className="form-label">
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              value={formData.message}
+        <form onSubmit={handleSubmit} className="form" data-form>
+          <div className="input-wrapper">
+            <input
+              type="text"
+              name="name"
+              className="form-input"
+              placeholder="Full name"
+              required
+              data-form-input
+              value={formData.name}
               onChange={handleChange}
-              className="form-textarea"
-              placeholder="Your Message..."
               disabled={loading}
-            ></textarea>
+            />
+
+            <input
+              type="email"
+              name="email"
+              className="form-input"
+              placeholder="Email address"
+              required
+              data-form-input
+              value={formData.email}
+              onChange={handleChange}
+              disabled={loading}
+            />
           </div>
+
+          <textarea
+            name="message"
+            className="form-input"
+            placeholder="Your Message"
+            required
+            data-form-input
+            value={formData.message}
+            onChange={handleChange}
+            disabled={loading}
+          ></textarea>
 
           {status.text && (
-            <div className={`form-status ${status.type}`}>
+            <div
+              style={{
+                padding: '12px 16px',
+                borderRadius: '12px',
+                fontSize: '14px',
+                marginBottom: '15px',
+                color: status.type === 'success' ? '#22c55e' : '#ef4444',
+                background: status.type === 'success' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                border: `1px solid ${status.type === 'success' ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)'}`,
+              }}
+            >
               {status.text}
             </div>
           )}
 
           <button
+            className="form-btn"
             type="submit"
-            className="btn btn-primary contact-btn"
-            disabled={loading}
-            style={{ width: 'auto', alignSelf: 'flex-end', padding: '12px 30px' }}
+            disabled={loading || !formData.name || !formData.email || !formData.message}
+            data-form-btn
           >
-            {loading ? (
-              <span>Sending...</span>
-            ) : (
-              <>
-                <span>Send Message</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13"></line>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-              </>
-            )}
+            <ion-icon name="paper-plane"></ion-icon>
+            <span>{loading ? 'Sending...' : 'Send Message'}</span>
           </button>
         </form>
-      </div>
-    </div>
+      </section>
+    </article>
   )
 }
 

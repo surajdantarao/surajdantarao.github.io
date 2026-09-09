@@ -1,46 +1,34 @@
+import { useState } from 'react'
+import Sidebar from './components/Sidebar'
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
 import About from './components/About'
-import Skills from './components/Skills'
+import ResumePage from './components/ResumePage'
 import Projects from './components/Projects'
+import Skills from './components/Skills'
 import Contact from './components/Contact'
-import Footer from './components/Footer'
 import './App.css'
 
 function App() {
+  const [activeTab, setActiveTab] = useState('about')
+
   return (
-    <div className="portfolio-app">
-      {/* Sticky Header Navigation */}
-      <Navbar />
+    <main>
+      {/* Sidebar */}
+      <Sidebar />
 
-      {/* Main Top-Down Sections */}
-      <main className="portfolio-container">
-        <Hero />
-        
-        <div className="section-divider"></div>
-        <section id="about" className="scroll-section">
-          <About />
-        </section>
+      {/* Main Content Area */}
+      <div className="main-content">
+        {/* Navigation Bar */}
+        <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        <div className="section-divider"></div>
-        <section id="skills" className="scroll-section">
-          <Skills />
-        </section>
-
-        <div className="section-divider"></div>
-        <section id="projects" className="scroll-section">
-          <Projects />
-        </section>
-
-        <div className="section-divider"></div>
-        <section id="contact" className="scroll-section">
-          <Contact />
-        </section>
-      </main>
-
-      {/* Global Footer */}
-      <Footer />
-    </div>
+        {/* Dynamic Tab Pages */}
+        {activeTab === 'about' && <About />}
+        {activeTab === 'resume' && <ResumePage />}
+        {activeTab === 'projects' && <Projects />}
+        {activeTab === 'skills' && <Skills />}
+        {activeTab === 'contact' && <Contact />}
+      </div>
+    </main>
   )
 }
 

@@ -1,79 +1,129 @@
+import { useState } from 'react'
 import { projectsData } from '../portfolioData'
 
 const Projects = () => {
+  const [activeFilter, setActiveFilter] = useState('all')
+  const [isSelectOpen, setIsSelectOpen] = useState(false)
+
+  const categories = [
+    { id: 'all', label: 'All' },
+    { id: 'applications', label: 'Applications' },
+    { id: 'web development', label: 'Web development' },
+    { id: 'machine learning', label: 'Machine Learning' },
+  ]
+
+  // Map each project to a category identifier
+  const getProjectCategory = (id) => {
+    if (id === 'mailAgent' || id === 'guestLecture') return 'applications'
+    if (id === 'gymSystem' || id === 'qrStore') return 'web development'
+    if (id === 'spamDetection') return 'machine learning'
+    return 'applications'
+  }
+
+  const getDisplayCategory = (id) => {
+    if (id === 'mailAgent') return 'AI & Local LLM Automation'
+    if (id === 'gymSystem') return 'Full Stack MERN System'
+    if (id === 'spamDetection') return 'NLP & Naive Bayes Classifier'
+    if (id === 'qrStore') return 'Web Development'
+    if (id === 'guestLecture') return 'Applications'
+    return 'Applications'
+  }
+
+  const handleFilterClick = (catId) => {
+    setActiveFilter(catId.toLowerCase())
+    setIsSelectOpen(false)
+  }
+
+  const filteredProjects = projectsData.filter((project) => {
+    if (activeFilter === 'all') return true
+    return getProjectCategory(project.id) === activeFilter
+  })
+
   return (
-    <div className="projects-tab-container">
+    <article className="portfolio active" data-page="portfolio">
       <header>
-        <h2 className="article-title">Projects</h2>
+        <h2 className="h2 article-title">Projects</h2>
       </header>
 
-      <div className="projects-grid animate-fade-in-up" style={{ marginTop: '30px' }}>
-        {projectsData.map((project) => (
-          <div
-            key={project.id}
-            className="project-card"
+      <section className="projects">
+        <ul className="filter-list">
+          {categories.map((cat) => (
+            <li key={cat.id} className="filter-item">
+              <button
+                className={activeFilter === cat.id ? 'active' : ''}
+                data-filter-btn
+                onClick={() => handleFilterClick(cat.id)}
+              >
+                {cat.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+
+        <div className="filter-select-box">
+          <button
+            className={`filter-select ${isSelectOpen ? 'active' : ''}`}
+            data-select
+            onClick={() => setIsSelectOpen(!isSelectOpen)}
           >
-            {project.image && (
-              <div className="project-image-box">
-                <img src={project.image} alt={project.name} className="project-image" />
-              </div>
-            )}
-            <div className="project-body">
-              <h3 className="project-title">{project.name}</h3>
-              <p className="project-desc">{project.description}</p>
-
-              <div className="project-features">
-                <div className="project-features-title">Key Features</div>
-                <ul className="project-features-list">
-                  {project.features.map((feature, idx) => (
-                    <li key={idx}>{feature}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="project-tech">
-                {project.technologies.map((tech, idx) => (
-                  <span key={idx} className="project-tech-tag">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-
-              <div className="project-actions">
-                {project.github && (
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="project-btn project-btn-primary"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-                    </svg>
-                    Source Code
-                  </a>
-                )}
-                {project.demo && (
-                  <a
-                    href={project.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="project-btn project-btn-accent"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                      <polyline points="15 3 21 3 21 9"></polyline>
-                      <line x1="10" y1="14" x2="21" y2="3"></line>
-                    </svg>
-                    Live Demo
-                  </a>
-                )}
-              </div>
+            <div className="select-value" data-selecct-value>
+              {categories.find((c) => c.id === activeFilter)?.label || 'Select category'}
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
+
+            <div className="select-icon">
+              <ion-icon name="chevron-down"></ion-icon>
+            </div>
+          </button>
+
+          <ul className="select-list">
+            {categories.map((cat) => (
+              <li key={cat.id} className="select-item">
+                <button
+                  data-select-item
+                  onClick={() => handleFilterClick(cat.id)}
+                >
+                  {cat.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <ul className="project-list">
+          {filteredProjects.map((project) => {
+            const projectLink = project.demo || project.github || 'https://github.com/surajdantarao'
+            const displayCat = getDisplayCategory(project.id)
+
+            return (
+              <li
+                key={project.id}
+                className="project-item active"
+                data-filter-item
+                data-category={getProjectCategory(project.id)}
+              >
+                <a
+                  href={projectLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <figure className="project-img">
+                    <div className="project-item-icon-box">
+                      <ion-icon name="eye-outline"></ion-icon>
+                    </div>
+
+                    <img src={project.image} alt={project.name} loading="lazy" />
+                  </figure>
+
+                  <h3 className="project-title">{project.name}</h3>
+
+                  <p className="project-category">{displayCat}</p>
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+      </section>
+    </article>
   )
 }
 

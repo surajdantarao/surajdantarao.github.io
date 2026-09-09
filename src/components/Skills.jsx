@@ -1,96 +1,199 @@
-import { skillsData } from '../portfolioData'
-
-const getCategoryIcon = (classId) => {
-  switch (classId) {
-    case 'languages':
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="16 18 22 12 16 6"></polyline>
-          <polyline points="8 6 2 12 8 18"></polyline>
-        </svg>
-      )
-    case 'backend':
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-          <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-          <line x1="6" y1="6" x2="6.01" y2="6"></line>
-          <line x1="6" y1="18" x2="6.01" y2="18"></line>
-        </svg>
-      )
-    case 'frontend':
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-          <line x1="8" y1="21" x2="16" y2="21"></line>
-          <line x1="12" y1="17" x2="12" y2="21"></line>
-        </svg>
-      )
-    case 'devops':
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-          <polyline points="12 11 12 17 18 17"></polyline>
-        </svg>
-      )
-    case 'databases':
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
-          <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"></path>
-        </svg>
-      )
-    case 'architecture':
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-          <polyline points="2 17 12 22 22 17"></polyline>
-          <polyline points="2 12 12 17 22 12"></polyline>
-        </svg>
-      )
-    case 'testing':
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-          <polyline points="22 4 12 14.01 9 11.01"></polyline>
-        </svg>
-      )
-    default:
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="16 18 22 12 16 6"></polyline>
-          <polyline points="8 6 2 12 8 18"></polyline>
-        </svg>
-      )
-  }
-}
+import { useState } from 'react'
 
 const Skills = () => {
+  const [activeFilter, setActiveFilter] = useState('all')
+  const [isSelectOpen, setIsSelectOpen] = useState(false)
+
+  const categories = [
+    { id: 'all', label: 'All' },
+    { id: 'technical skills', label: 'Technical Skills' },
+    { id: 'certificates', label: 'Certificates' },
+  ]
+
+  const technicalSkills = [
+    {
+      group: 'Programming Languages',
+      skills: [
+        { name: 'Python', percent: 90 },
+        { name: 'JavaScript', percent: 85 },
+        { name: 'SQL', percent: 85 },
+        { name: 'Java', percent: 75 },
+        { name: 'C / C++', percent: 70 },
+      ],
+    },
+    {
+      group: 'AI & Machine Learning',
+      skills: [
+        { name: 'NLP & Text Classification', percent: 85 },
+        { name: 'Scikit-learn & TF-IDF', percent: 85 },
+        { name: 'Local LLMs (Ollama)', percent: 80 },
+        { name: 'Model Optimization', percent: 75 },
+      ],
+    },
+    {
+      group: 'Web Technologies & Frameworks',
+      skills: [
+        { name: 'React.js', percent: 85 },
+        { name: 'FastAPI / Flask', percent: 80 },
+        { name: 'Node.js & Express', percent: 75 },
+        { name: 'HTML5 / CSS3', percent: 90 },
+      ],
+    },
+    {
+      group: 'Databases & Cloud',
+      skills: [
+        { name: 'MongoDB', percent: 75 },
+        { name: 'SQLite', percent: 85 },
+        { name: 'MySQL', percent: 80 },
+        { name: 'REST APIs & Webhooks', percent: 85 },
+      ],
+    },
+  ]
+
+  const certificatesList = [
+    {
+      title: 'Artificial Intelligence Specialist',
+      issuer: 'Certiport (Feb 2025)',
+      desc: 'Information Technology Specialist – AI Foundations & Application',
+    },
+    {
+      title: 'Code Without Barriers: Ethical AI Practice',
+      issuer: 'Microsoft (Mar 2025)',
+      desc: 'Responsible AI Design, Compliance & Machine Learning Ethics',
+    },
+    {
+      title: 'Deep Learning with Certification',
+      issuer: 'Advanced Neural Networks & Models',
+      desc: 'Deep Learning Model Architectures and Practice (Nov 2025)',
+    },
+    {
+      title: 'Whitecode AI Engineering Recognition',
+      issuer: 'Whitecode AI',
+      desc: 'Selected for developing production-ready local AI agent prototypes',
+    },
+  ]
+
+  const handleFilterClick = (catId) => {
+    setActiveFilter(catId.toLowerCase())
+    setIsSelectOpen(false)
+  }
+
+  const showTech = activeFilter === 'all' || activeFilter === 'technical skills'
+  const showCert = activeFilter === 'all' || activeFilter === 'certificates'
+
   return (
-    <div className="skills-tab-container">
+    <article className="Skills active" data-page="Skills">
       <header>
-        <h2 className="article-title">Skills</h2>
+        <h2 className="h2 article-title">Skills</h2>
       </header>
 
-      <div className="skills-grid animate-fade-in-up" style={{ marginTop: '30px' }}>
-        {skillsData.map((skillGroup, index) => (
-          <div key={index} className="skill-card">
-            <div className="skill-icon-wrapper">
-              {getCategoryIcon(skillGroup.classId)}
+      <section className="projects">
+        <ul className="filter-list">
+          {categories.map((cat) => (
+            <li key={cat.id} className="filter-item">
+              <button
+                className={activeFilter === cat.id ? 'active' : ''}
+                data-filter-btn
+                onClick={() => handleFilterClick(cat.id)}
+              >
+                {cat.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+
+        <div className="filter-select-box">
+          <button
+            className={`filter-select ${isSelectOpen ? 'active' : ''}`}
+            data-select
+            onClick={() => setIsSelectOpen(!isSelectOpen)}
+          >
+            <div className="select-value" data-selecct-value>
+              {categories.find((c) => c.id === activeFilter)?.label || 'Select category'}
             </div>
-            <h3 className="skill-card-title">{skillGroup.category}</h3>
-            <div className="skill-tags">
-              {skillGroup.skills.map((skill, tIdx) => (
-                <span key={tIdx} className="skill-tag">
-                  {skill}
-                </span>
+
+            <div className="select-icon">
+              <ion-icon name="chevron-down"></ion-icon>
+            </div>
+          </button>
+
+          <ul className="select-list">
+            {categories.map((cat) => (
+              <li key={cat.id} className="select-item">
+                <button
+                  data-select-item
+                  onClick={() => handleFilterClick(cat.id)}
+                >
+                  {cat.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Technical Skills with Progress Bars */}
+        {showTech && (
+          <section className="skill" style={{ marginBottom: '35px' }}>
+            <h3 className="h3 skills-title" style={{ marginBottom: '20px' }}>
+              Technical Skills
+            </h3>
+
+            {technicalSkills.map((group, gIdx) => (
+              <div key={gIdx} style={{ marginBottom: '25px' }}>
+                <h4 className="h4 timeline-item-title" style={{ marginBottom: '12px' }}>
+                  {group.group}
+                </h4>
+
+                <ul className="skills-list content-card" style={{ marginBottom: '15px' }}>
+                  {group.skills.map((skill, sIdx) => (
+                    <li key={sIdx} className="skills-item">
+                      <div className="title-wrapper">
+                        <h5 className="h5">{skill.name}</h5>
+                        <data value={skill.percent}>{skill.percent}%</data>
+                      </div>
+
+                      <div className="skill-progress-bg">
+                        <div
+                          className="skill-progress-fill"
+                          style={{ width: `${skill.percent}%` }}
+                        ></div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </section>
+        )}
+
+        {/* Certificates Section */}
+        {showCert && (
+          <section className="skill">
+            <h3 className="h3 skills-title" style={{ marginBottom: '20px' }}>
+              Certifications &amp; Accolades
+            </h3>
+
+            <ul className="service-list">
+              {certificatesList.map((cert, cIdx) => (
+                <li key={cIdx} className="service-item">
+                  <div className="service-icon-box">
+                    <img src="./assets/images/icon-design.svg" alt="certificate icon" width="40" />
+                  </div>
+
+                  <div className="service-content-box">
+                    <h4 className="h4 service-item-title">{cert.title}</h4>
+                    <span style={{ fontSize: '12px', color: 'var(--orange-yellow-crayola)', display: 'block', marginBottom: '4px' }}>
+                      {cert.issuer}
+                    </span>
+                    <p className="service-item-text">{cert.desc}</p>
+                  </div>
+                </li>
               ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+            </ul>
+          </section>
+        )}
+      </section>
+    </article>
   )
 }
 
