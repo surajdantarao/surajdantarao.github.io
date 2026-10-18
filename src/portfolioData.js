@@ -270,7 +270,6 @@ export const certificationsData = certificatesList.map(c => `${c.title} | ${c.is
 
 // Recognitions / Accolades List
 export const recognitionsData = [
-  'Whitecode AI Recognition | Developed production-grade AI agent prototypes selected for live deployment at Whitecode AI',
   'Open-Source Contributor | Maintained and published multiple open-source repositories covering AI agents and web apps'
 ]
 
