@@ -7,27 +7,35 @@ const Projects = () => {
 
   const categories = [
     { id: 'all', label: 'All' },
-    { id: 'applications', label: 'Applications' },
+    { id: 'ai & machine learning', label: 'AI & Machine Learning' },
     { id: 'web development', label: 'Web development' },
-    { id: 'machine learning', label: 'Machine Learning' },
+    { id: 'automation & tools', label: 'Automation & Tools' },
   ]
 
-  // Map each project to a category identifier
+  // Categorize projects with AI projects in their own dedicated category
   const getProjectCategory = (id) => {
-    if (id === 'mailAgent' || id === 'guestLecture') return 'applications'
-    if (id === 'garbaSaathi' || id === 'gymSystem' || id === 'qrStore') return 'web development'
-    if (id === 'spamDetection') return 'machine learning'
-    return 'applications'
+    if (id === 'mahaSevaAi' || id === 'mailAgent' || id === 'spamDetection') {
+      return 'ai & machine learning'
+    }
+    if (id === 'garbaSaathi' || id === 'gymSystem' || id === 'guestLecture' || id === 'qrStore') {
+      return 'web development'
+    }
+    if (id === 'taskSheetAutomation') {
+      return 'automation & tools'
+    }
+    return 'web development'
   }
 
   const getDisplayCategory = (id) => {
-    if (id === 'garbaSaathi') return 'Community Web Application'
+    if (id === 'mahaSevaAi') return 'AI Citizen Assistance Platform'
     if (id === 'mailAgent') return 'AI & Local LLM Automation'
-    if (id === 'gymSystem') return 'Full Stack MERN System'
     if (id === 'spamDetection') return 'NLP & Naive Bayes Classifier'
-    if (id === 'qrStore') return 'Web Development'
-    if (id === 'guestLecture') return 'Applications'
-    return 'Applications'
+    if (id === 'garbaSaathi') return 'Community Web Application'
+    if (id === 'gymSystem') return 'Full Stack MERN System'
+    if (id === 'guestLecture') return 'Academic Event & Entry Portal'
+    if (id === 'taskSheetAutomation') return 'Workflow & Pipeline Automation'
+    if (id === 'qrStore') return 'Hyperlocal Merchant Platform'
+    return 'Web Development'
   }
 
   const handleFilterClick = (catId) => {
@@ -122,7 +130,7 @@ const Projects = () => {
                     <p className="project-category">{displayCat}</p>
                   </a>
 
-                  {/* Dual Action Options: Live Demo and GitHub Repo */}
+                  {/* Dual Action Options: Shows both Live Demo and GitHub if available, or GitHub if no live link */}
                   <div className="project-links-bar" style={{ display: 'flex', gap: '8px', marginTop: '10px', marginLeft: '10px', flexWrap: 'wrap' }}>
                     {project.demo && (
                       <a

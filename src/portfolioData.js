@@ -84,6 +84,19 @@ export const experienceData = [
 // Projects Showcase
 export const projectsData = [
   {
+    id: 'mahaSevaAi',
+    name: 'MahaSeva AI',
+    description: 'A centralized Maharashtra government scheme discovery & citizen assistance platform powered by AI, helping citizens find verified public schemes, eligibility criteria, and official services.',
+    technologies: ['React.js', 'FastAPI', 'Python', 'NLP', 'Vector Search', 'Ollama'],
+    image: '/maha_seva_ai.jpg',
+    features: [
+      'AI-powered scheme recommendation and citizen eligibility assistant.',
+      'Centralized directory of verified Maharashtra government schemes with official links.'
+    ],
+    github: 'https://github.com/surajdantarao/MahaSeva-AI.git',
+    demo: 'https://maha-seva-ai.vercel.app/'
+  },
+  {
     id: 'garbaSaathi',
     name: 'GarbaSaathi Pune',
     description: 'A dedicated Navratri community platform for Garba & Dandiya enthusiasts across Pune to connect, discover events, find dance partners, and celebrate festivals together.',
@@ -93,7 +106,7 @@ export const projectsData = [
       'Built a vibrant, responsive festival community portal for Garba dancers across Pune.',
       'Features event discovery, circle matching, and seamless mobile-first user experience.'
     ],
-    github: 'https://github.com/surajdantarao/garabasaathi',
+    github: 'https://github.com/surajdantarao/garabasaathi.git',
     demo: 'https://client-hazel-alpha-12.vercel.app/'
   },
   {
@@ -108,6 +121,19 @@ export const projectsData = [
     ],
     github: 'https://github.com/surajdantarao/AI-Mail-agent',
     demo: ''
+  },
+  {
+    id: 'guestLecture',
+    name: 'Guest Lecture & Visitor Management System',
+    description: 'A digital system to manage guest speaker events, visitor entries, lecturer profiles, and feedback logs.',
+    technologies: ['React.js', 'Node.js', 'Bootstrap', 'Express.js', 'MySQL'],
+    image: '/guest_lecture.jpg',
+    features: [
+      'Built a system to manage guest lectures and visitor entries digitally.',
+      'Implemented entry tracking, scheduling, and record management.'
+    ],
+    github: 'https://github.com/surajdantarao/guest-leacture',
+    demo: 'https://guest-leacture.vercel.app/'
   },
   {
     id: 'gymSystem',
@@ -134,7 +160,20 @@ export const projectsData = [
       'Applied TF-IDF vectorization and NLP preprocessing.',
       'Achieved ~97% classification accuracy.'
     ],
-    github: 'https://github.com/surajdantarao/spamdetection',
+    github: 'https://github.com/surajdantarao/spam-detection-.git',
+    demo: ''
+  },
+  {
+    id: 'taskSheetAutomation',
+    name: 'Task Sheet Automation',
+    description: 'An automated workflow engine that syncs tasks, updates spreadsheets, processes automated pipeline queues, and connects external APIs with zero manual data entry.',
+    technologies: ['Python', 'FastAPI', 'Google Sheets API', 'Webhooks', 'Task Queues'],
+    image: '/task_sheet_automation.jpg',
+    features: [
+      'Automated two-way synchronization between database records and Google Sheets.',
+      'Webhook listener and scheduled background job processor for team task tracking.'
+    ],
+    github: 'https://github.com/surajdantarao/task-sheet-automation.git',
     demo: ''
   },
   {
@@ -148,19 +187,6 @@ export const projectsData = [
       'Implemented seller dashboard with real-time order management.'
     ],
     github: 'https://github.com/surajdantarao/qr-store',
-    demo: ''
-  },
-  {
-    id: 'guestLecture',
-    name: 'Guest Lecture & Visitor Management System',
-    description: 'A digital system to manage guest speaker events, visitor entries, lecturer profiles, and feedback logs.',
-    technologies: ['Node.js', 'React.js', 'MySQL', 'Express.js'],
-    image: '/guest_lecture.jpg',
-    features: [
-      'Built a system to manage guest lectures and visitor entries digitally.',
-      'Implemented entry tracking, scheduling, and record management.'
-    ],
-    github: 'https://github.com/surajdantarao/guest-leacture',
     demo: ''
   }
 ]
