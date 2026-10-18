@@ -22,27 +22,27 @@ export const skillsData = [
   {
     category: 'Programming',
     classId: 'languages',
-    skills: ['Python', 'JavaScript', 'Java', 'C / C++', 'SQL', 'HTML5', 'CSS3']
+    skills: ['Python', 'JavaScript', 'TypeScript', 'Java', 'C / C++', 'SQL', 'HTML5', 'CSS3']
   },
   {
     category: 'Machine Learning & AI',
     classId: 'ai-ml',
-    skills: ['Scikit-learn', 'NLP', 'TF-IDF', 'Naive Bayes', 'Deep Learning', 'TensorFlow', 'Ollama', 'LLM Integration']
+    skills: ['Scikit-learn', 'NLP', 'TF-IDF', 'Naive Bayes', 'Deep Learning', 'TensorFlow', 'Ollama', 'Local LLMs', 'Model Context Protocol (MCP)', 'Vector Search']
   },
   {
     category: 'Web & Frameworks',
     classId: 'frontend',
-    skills: ['Flask', 'React.js', 'FastAPI', 'Node.js', 'Express.js', 'RESTful APIs', 'Bootstrap']
+    skills: ['React.js', 'Vite', 'FastAPI', 'Node.js', 'Express.js', 'Flask', 'Tailwind CSS', 'RESTful APIs', 'Bootstrap']
   },
   {
     category: 'Databases',
     classId: 'databases',
-    skills: ['MongoDB', 'MySQL', 'SQLite', 'SQLAlchemy']
+    skills: ['MongoDB', 'MySQL', 'SQLite', 'PostgreSQL', 'SQLAlchemy']
   },
   {
     category: 'Tools & Practices',
     classId: 'tools',
-    skills: ['Git', 'GitHub', 'Postman', 'Vite', 'npm', 'Google APIs (Gmail, Sheets, Drive)']
+    skills: ['Git', 'GitHub', 'Docker', 'Postman', 'Google APIs (Gmail, Sheets, Drive)', 'Task Automation', 'CI/CD Basics']
   }
 ]
 
@@ -187,7 +187,7 @@ export const projectsData = [
       'Implemented seller dashboard with real-time order management.'
     ],
     github: 'https://github.com/surajdantarao/qr-store',
-    demo: ''
+    demo: 'https://qr-store.onrender.com/'
   }
 ]
 
