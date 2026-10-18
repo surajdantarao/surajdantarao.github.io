@@ -15,6 +15,8 @@ const __dirname = path.dirname(__filename);
     const distNamedPdfPath = path.join(__dirname, 'dist', 'Suraj_Dantarao_Resume.pdf');
     const rootPdfPath = path.join(__dirname, 'Suraj_Dantarao_Resume.pdf');
     const artifactPdfPath = 'C:\\Users\\suraj\\.gemini\\antigravity\\brain\\39d1c8a0-6ba0-4b57-91b4-8952e96ecf72\\Suraj_Dantarao_Resume.pdf';
+    const previewPngPath = path.join(__dirname, 'public', 'resume_preview.png');
+    const artifactPreviewPath = 'C:\\Users\\suraj\\.gemini\\antigravity\\brain\\39d1c8a0-6ba0-4b57-91b4-8952e96ecf72\\resume_preview.png';
 
     console.log('Launching browser using Edge executable...');
     const browser = await puppeteer.launch({
@@ -34,17 +36,28 @@ const __dirname = path.dirname(__filename);
       path: publicPdfPath,
       format: 'Letter',
       printBackground: true,
-      preferCSSPageSize: true,
-      margin: { top: '0.22in', right: '0.32in', bottom: '0.2in', left: '0.32in' }
+      margin: { top: '0.22in', right: '0.34in', bottom: '0.20in', left: '0.34in' }
     });
 
-    // Also take a screenshot preview of the rendered resume page
+    // Verify it is strictly 1 page
+    try {
+      await page.pdf({
+        pageRanges: '2',
+        format: 'Letter',
+        margin: { top: '0.22in', right: '0.34in', bottom: '0.20in', left: '0.34in' }
+      });
+      console.warn('WARNING: Spilled into page 2!');
+    } catch (err) {
+      console.log('Confirmed: Strictly 1 page (page 2 does not exist).');
+    }
+
+    // High resolution preview screenshot of the full rendered page
     await page.setViewport({ width: 850, height: 1100, deviceScaleFactor: 2 });
-    await page.screenshot({ path: path.join(__dirname, 'public', 'resume_preview.png'), fullPage: false });
+    await page.screenshot({ path: previewPngPath, fullPage: false });
 
     await browser.close();
 
-    // Copy to all target locations
+    // Copy to all required locations
     if (!fs.existsSync(path.join(__dirname, 'dist'))) {
       fs.mkdirSync(path.join(__dirname, 'dist'), { recursive: true });
     }
@@ -58,8 +71,15 @@ const __dirname = path.dirname(__filename);
     fs.copyFileSync(publicPdfPath, distNamedPdfPath);
     fs.copyFileSync(publicPdfPath, rootPdfPath);
     fs.copyFileSync(publicPdfPath, artifactPdfPath);
+    fs.copyFileSync(previewPngPath, artifactPreviewPath);
 
-    console.log('PDF generated and synchronized successfully across all locations!');
+    // Clean up temporary test files if they exist
+    const testHtml = path.join(__dirname, 'resume_test.html');
+    const testJs = path.join(__dirname, 'test-resume.js');
+    if (fs.existsSync(testHtml)) fs.unlinkSync(testHtml);
+    if (fs.existsSync(testJs)) fs.unlinkSync(testJs);
+
+    console.log('PDF and preview generated and synchronized successfully across all locations!');
   } catch (err) {
     console.error('Error generating PDF:', err);
     process.exit(1);
