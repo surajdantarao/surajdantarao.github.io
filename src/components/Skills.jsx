@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { certificatesList } from '../portfolioData'
 
 const Skills = () => {
   const [activeFilter, setActiveFilter] = useState('all')
@@ -27,7 +28,8 @@ const Skills = () => {
         { name: 'NLP & Text Classification', percent: 85 },
         { name: 'Scikit-learn & TF-IDF', percent: 85 },
         { name: 'Local LLMs (Ollama)', percent: 80 },
-        { name: 'Model Optimization', percent: 75 },
+        { name: 'Model Context Protocol (MCP)', percent: 85 },
+        { name: 'Deep Learning', percent: 75 },
       ],
     },
     {
@@ -47,29 +49,6 @@ const Skills = () => {
         { name: 'MySQL', percent: 80 },
         { name: 'REST APIs & Webhooks', percent: 85 },
       ],
-    },
-  ]
-
-  const certificatesList = [
-    {
-      title: 'Artificial Intelligence Specialist',
-      issuer: 'Certiport (Feb 2025)',
-      desc: 'Information Technology Specialist – AI Foundations & Application',
-    },
-    {
-      title: 'Code Without Barriers: Ethical AI Practice',
-      issuer: 'Microsoft (Mar 2025)',
-      desc: 'Responsible AI Design, Compliance & Machine Learning Ethics',
-    },
-    {
-      title: 'Deep Learning with Certification',
-      issuer: 'Advanced Neural Networks & Models',
-      desc: 'Deep Learning Model Architectures and Practice (Nov 2025)',
-    },
-    {
-      title: 'Whitecode AI Engineering Recognition',
-      issuer: 'Whitecode AI',
-      desc: 'Selected for developing production-ready local AI agent prototypes',
     },
   ]
 
@@ -131,9 +110,55 @@ const Skills = () => {
           </ul>
         </div>
 
+        {/* Certificates Section (Grid of Certificate Cards with Previews) */}
+        {showCert && (
+          <div style={{ marginBottom: '40px' }}>
+            <h3 className="h3 skills-title" style={{ marginBottom: '20px' }}>
+              Certificates &amp; Achievements
+            </h3>
+
+            <ul className="project-list">
+              {certificatesList.map((cert, index) => (
+                <li
+                  key={index}
+                  className="project-item active"
+                  data-filter-item
+                  data-category="certificates"
+                >
+                  <a
+                    href={cert.file}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={`Click to view/download ${cert.title}`}
+                  >
+                    <figure className="project-img">
+                      <div className="project-item-icon-box">
+                        <ion-icon name="eye-outline"></ion-icon>
+                      </div>
+
+                      <img
+                        src={cert.image}
+                        alt={cert.title}
+                        loading="lazy"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    </figure>
+
+                    <h3 className="project-title">{cert.title}</h3>
+
+                    <p className="project-category">
+                      {cert.issuer} • {cert.category}
+                    </p>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {/* Technical Skills with Progress Bars */}
         {showTech && (
-          <section className="skill" style={{ marginBottom: '35px' }}>
+          <section className="skill">
             <h3 className="h3 skills-title" style={{ marginBottom: '20px' }}>
               Technical Skills
             </h3>
@@ -163,33 +188,6 @@ const Skills = () => {
                 </ul>
               </div>
             ))}
-          </section>
-        )}
-
-        {/* Certificates Section */}
-        {showCert && (
-          <section className="skill">
-            <h3 className="h3 skills-title" style={{ marginBottom: '20px' }}>
-              Certifications &amp; Accolades
-            </h3>
-
-            <ul className="service-list">
-              {certificatesList.map((cert, cIdx) => (
-                <li key={cIdx} className="service-item">
-                  <div className="service-icon-box">
-                    <img src="./assets/images/icon-design.svg" alt="certificate icon" width="40" />
-                  </div>
-
-                  <div className="service-content-box">
-                    <h4 className="h4 service-item-title">{cert.title}</h4>
-                    <span style={{ fontSize: '12px', color: 'var(--orange-yellow-crayola)', display: 'block', marginBottom: '4px' }}>
-                      {cert.issuer}
-                    </span>
-                    <p className="service-item-text">{cert.desc}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
           </section>
         )}
       </section>

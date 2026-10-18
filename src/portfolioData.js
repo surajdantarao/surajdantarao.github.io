@@ -174,12 +174,60 @@ export const educationData = [
   }
 ]
 
-// Certifications List
-export const certificationsData = [
-  'Artificial Intelligence (Feb 28, 2025) | Information Technology Specialist – Certiport',
-  'Code Without Barriers: Ethical AI Practice (Feb/Mar 2025) | Microsoft',
-  'Deep Learning with Certification (Nov 12, 2025)'
+// Certifications List with files and preview thumbnails
+export const certificatesList = [
+  {
+    title: 'Google AI Fundamentals',
+    issuer: 'Google Career Certificates',
+    image: './assets/certificates/AI-Fundamntals Google.jpg',
+    file: './certificates/AI-Fundamntals Google .jpeg',
+    category: 'Artificial Intelligence'
+  },
+  {
+    title: 'Claude 101: Foundation Certification',
+    issuer: 'Anthropic',
+    image: './assets/certificates/Antropic Claude 101.jpg',
+    file: './certificates/Antropic Claude 101 .pdf',
+    category: 'LLM & Generative AI'
+  },
+  {
+    title: 'Model Context Protocol (MCP)',
+    issuer: 'Anthropic',
+    image: './assets/certificates/Antropic MCP.jpg',
+    file: './certificates/Antropic MCP.pdf',
+    category: 'AI Agent Architecture'
+  },
+  {
+    title: 'IT Specialist: Artificial Intelligence',
+    issuer: 'Certiport (Pearson VUE)',
+    image: './assets/certificates/Artificial Intelliagence Certiport.jpg',
+    file: './certificates/Artificial Intelliagence Certiport.pdf',
+    category: 'Artificial Intelligence'
+  },
+  {
+    title: 'Code; Without Barriers',
+    issuer: 'Microsoft',
+    image: './assets/certificates/Code without barriour microsoft.jpg',
+    file: './certificates/Code without barriour microsoft.pdf',
+    category: 'Ethical AI & Cloud'
+  },
+  {
+    title: 'Deep Learning with Certification',
+    issuer: 'Deep Learning Specialization',
+    image: './assets/certificates/Deep Learning with Certification.jpg',
+    file: './certificates/Deep Learning with Certification.pdf',
+    category: 'Deep Learning'
+  },
+  {
+    title: 'Ideation & Innovation Program',
+    issuer: 'National Innovation Showcase',
+    image: './assets/certificates/Suraj_Dantarao Ideation.jpg',
+    file: './certificates/Suraj_Dantarao Ideation.pdf',
+    category: 'Hackathons & Innovation'
+  }
 ]
+
+export const certificationsData = certificatesList.map(c => `${c.title} | ${c.issuer}`)
 
 // Recognitions / Accolades List
 export const recognitionsData = [
