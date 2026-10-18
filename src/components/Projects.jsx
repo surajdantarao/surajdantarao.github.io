@@ -15,12 +15,13 @@ const Projects = () => {
   // Map each project to a category identifier
   const getProjectCategory = (id) => {
     if (id === 'mailAgent' || id === 'guestLecture') return 'applications'
-    if (id === 'gymSystem' || id === 'qrStore') return 'web development'
+    if (id === 'garbaSaathi' || id === 'gymSystem' || id === 'qrStore') return 'web development'
     if (id === 'spamDetection') return 'machine learning'
     return 'applications'
   }
 
   const getDisplayCategory = (id) => {
+    if (id === 'garbaSaathi') return 'Community Web Application'
     if (id === 'mailAgent') return 'AI & Local LLM Automation'
     if (id === 'gymSystem') return 'Full Stack MERN System'
     if (id === 'spamDetection') return 'NLP & Naive Bayes Classifier'
@@ -91,7 +92,7 @@ const Projects = () => {
 
         <ul className="project-list">
           {filteredProjects.map((project) => {
-            const projectLink = project.demo || project.github || 'https://github.com/surajdantarao'
+            const primaryLink = project.demo || project.github || 'https://github.com/surajdantarao'
             const displayCat = getDisplayCategory(project.id)
 
             return (
@@ -101,23 +102,54 @@ const Projects = () => {
                 data-filter-item
                 data-category={getProjectCategory(project.id)}
               >
-                <a
-                  href={projectLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <figure className="project-img">
-                    <div className="project-item-icon-box">
-                      <ion-icon name="eye-outline"></ion-icon>
-                    </div>
+                <div>
+                  <a
+                    href={primaryLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={`Open ${project.name}`}
+                  >
+                    <figure className="project-img">
+                      <div className="project-item-icon-box">
+                        <ion-icon name="eye-outline"></ion-icon>
+                      </div>
 
-                    <img src={project.image} alt={project.name} loading="lazy" />
-                  </figure>
+                      <img src={project.image} alt={project.name} loading="lazy" />
+                    </figure>
 
-                  <h3 className="project-title">{project.name}</h3>
+                    <h3 className="project-title">{project.name}</h3>
 
-                  <p className="project-category">{displayCat}</p>
-                </a>
+                    <p className="project-category">{displayCat}</p>
+                  </a>
+
+                  {/* Dual Action Options: Live Demo and GitHub Repo */}
+                  <div className="project-links-bar" style={{ display: 'flex', gap: '8px', marginTop: '10px', marginLeft: '10px', flexWrap: 'wrap' }}>
+                    {project.demo && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="project-action-btn live-btn"
+                        title="Open Live Website"
+                      >
+                        <ion-icon name="globe-outline"></ion-icon>
+                        <span>Live Demo</span>
+                      </a>
+                    )}
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="project-action-btn repo-btn"
+                        title="Open GitHub Repository"
+                      >
+                        <ion-icon name="logo-github"></ion-icon>
+                        <span>GitHub</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
               </li>
             )
           })}

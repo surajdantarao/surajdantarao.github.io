@@ -84,6 +84,19 @@ export const experienceData = [
 // Projects Showcase
 export const projectsData = [
   {
+    id: 'garbaSaathi',
+    name: 'GarbaSaathi Pune',
+    description: 'A dedicated Navratri community platform for Garba & Dandiya enthusiasts across Pune to connect, discover events, find dance partners, and celebrate festivals together.',
+    technologies: ['React.js', 'Vite', 'Tailwind CSS', 'Node.js'],
+    image: '/garba_saathi.jpg',
+    features: [
+      'Built a vibrant, responsive festival community portal for Garba dancers across Pune.',
+      'Features event discovery, circle matching, and seamless mobile-first user experience.'
+    ],
+    github: 'https://github.com/surajdantarao/garabasaathi',
+    demo: 'https://client-hazel-alpha-12.vercel.app/'
+  },
+  {
     id: 'mailAgent',
     name: 'AI Mail Agent',
     description: 'An AI-powered mail assistant that parses email streams, performs automatic summarization, and generates draft responses using Ollama local LLMs.',
