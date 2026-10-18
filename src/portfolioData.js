@@ -22,7 +22,7 @@ export const skillsData = [
   {
     category: 'Programming',
     classId: 'languages',
-    skills: ['Python', 'JavaScript', 'TypeScript', 'Java', 'C / C++', 'SQL', 'HTML5', 'CSS3']
+    skills: ['Python', 'JavaScript', 'TypeScript', 'Java', 'SQL', 'HTML5', 'CSS3']
   },
   {
     category: 'Machine Learning & AI',
