@@ -1,0 +1,505 @@
+import os
+import zipfile
+import io
+import shutil
+from PIL import Image
+import docx
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
+import copy
+
+TEMPLATE_PATH = r"C:\Users\suraj\.gemini\antigravity\brain\5de19afe-d938-4733-8e07-309ffc6e6c5c\.user_uploaded\media_1793538243343_931fcabd.docx"
+PHOTO_PATH = r"C:\Users\suraj\Documents\portfolio\dist\assets\passport photo.jpeg"
+OUTPUT_DIR = r"C:\Users\suraj\Documents\portfolio"
+DOCX_OUTPUT = os.path.join(OUTPUT_DIR, "Suraj_Dantarao_College_Resume.docx")
+PDF_OUTPUT = os.path.join(OUTPUT_DIR, "Suraj_Dantarao_College_Resume.pdf")
+
+def prepare_cropped_photo(src_path):
+    im = Image.open(src_path)
+    w, h = im.size
+    crop_size = min(w, h)
+    top = int((h - crop_size) * 0.25)
+    bottom = top + crop_size
+    cropped = im.crop((0, top, crop_size, bottom))
+    buf = io.BytesIO()
+    cropped.save(buf, format="JPEG", quality=95)
+    return buf.getvalue()
+
+def set_run(run, text, bold=None, italic=None, font_name="Calibri", font_size=120650):
+    run.text = text
+    if bold is not None:
+        run.bold = bold
+    if italic is not None:
+        run.italic = italic
+    if font_name:
+        run.font.name = font_name
+    if font_size:
+        run.font.size = font_size
+
+def create_element_clone(doc, base_p):
+    new_p_elem = copy.deepcopy(base_p._element)
+    # Clear runs in the cloned element
+    for r in new_p_elem.xpath('.//w:r'):
+        new_p_elem.remove(r)
+    return new_p_elem
+
+def build_resume():
+    doc = docx.Document(TEMPLATE_PATH)
+    
+    # 1. Update Table 0 (Header)
+    t0 = doc.tables[0]
+    # Cell 1 (Name and Degree)
+    c1 = t0.rows[0].cells[1]
+    p_name = c1.paragraphs[0]
+    p_name.text = ""
+    r_name = p_name.add_run("SURAJ DANTARAO")
+    r_name.bold = True
+    r_name.font.name = "Calibri"
+    r_name.font.size = 228600  # 18pt
+    p_name.alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.CENTER
+    
+    p_deg = c1.paragraphs[1]
+    p_deg.text = ""
+    r_deg = p_deg.add_run("B.Tech in Computer Technology")
+    r_deg.bold = False
+    r_deg.font.name = "Calibri"
+    r_deg.font.size = 152400  # 12pt
+    p_deg.alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.CENTER
+    
+    # 2. Update Table 1 (Contact info)
+    t1 = doc.tables[1]
+    p_contact = t1.rows[0].cells[0].paragraphs[0]
+    p_contact.text = ""
+    p_contact.alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.CENTER
+    
+    contact_parts = [
+        ("Pune, Maharashtra, India", False),
+        ("  |  ", False),
+        ("+91 8767753086", False),
+        ("  |  ", False),
+        ("surajdantrao0777@gmail.com", False),
+        ("  |  ", False),
+        ("https://linkedin.com/in/suraj-dantarao-b1b28b374", False),
+        ("  |  ", False),
+        ("https://github.com/surajdantarao", False)
+    ]
+    for text, bold in contact_parts:
+        r = p_contact.add_run(text)
+        r.font.name = "Calibri"
+        r.font.size = 114300  # 9pt
+        if bold:
+            r.bold = True
+
+    # 3. Reference paragraphs from template for exact styling cloning
+    # P2: Section Header (CAREER OBJECTIVE)
+    # P3: Objective Text
+    # P5: Education School line (bold tab bold)
+    # P6: Education Degree line (regular tab bold)
+    # P12: Experience Company line
+    # P13: Experience Role/Date line
+    # P14: Experience Bullet (ListParagraph with numId 2)
+    # P22: Project Name line
+    # P23: Project Tech line
+    # P24: Project Bullet
+    # P33: Skills line
+    # P42: Certification line
+    # P46: Extracurricular line
+    # P48: Achievements Header
+    # P49: Achievement line
+    
+    ref_header = doc.paragraphs[2]._element
+    ref_body = doc.paragraphs[3]._element
+    ref_edu_org = doc.paragraphs[5]._element
+    ref_edu_deg = doc.paragraphs[6]._element
+    ref_exp_org = doc.paragraphs[12]._element
+    ref_exp_role = doc.paragraphs[13]._element
+    ref_bullet = doc.paragraphs[14]._element
+    ref_proj_title = doc.paragraphs[22]._element
+    ref_proj_tech = doc.paragraphs[23]._element
+    ref_skill = doc.paragraphs[33]._element
+    ref_cert = doc.paragraphs[42]._element
+    ref_extra = doc.paragraphs[46]._element
+    ref_achieve = doc.paragraphs[49]._element
+    
+    # Store all paragraph elements to remove from P2 onwards
+    body_elem = doc._body._element
+    paragraphs_to_remove = [p._element for p in doc.paragraphs[2:]]
+    for p_elem in paragraphs_to_remove:
+        body_elem.remove(p_elem)
+        
+    def add_section_header(title):
+        elem = copy.deepcopy(ref_header)
+        for r in elem.xpath('.//w:r'):
+            elem.remove(r)
+        body_elem.append(elem)
+        p = doc.paragraphs[-1]
+        r = p.add_run(title)
+        r.bold = True
+        r.font.name = "Calibri"
+        
+    def add_bullet(text):
+        elem = copy.deepcopy(ref_bullet)
+        for r in elem.xpath('.//w:r'):
+            elem.remove(r)
+        body_elem.append(elem)
+        p = doc.paragraphs[-1]
+        r = p.add_run(text)
+        r.font.name = "Calibri"
+        r.font.size = 120650  # 9.5pt
+        
+    def add_edu_entry(org, loc, deg, date_grade):
+        # Org line
+        e1 = copy.deepcopy(ref_edu_org)
+        for r in e1.xpath('.//w:r'):
+            e1.remove(r)
+        body_elem.append(e1)
+        p1 = doc.paragraphs[-1]
+        r1a = p1.add_run(org)
+        r1a.bold = True
+        r1a.font.name = "Calibri"
+        r1a.font.size = 120650
+        r1tab = p1.add_run("\t")
+        r1tab.font.name = "Calibri"
+        r1b = p1.add_run(loc)
+        r1b.bold = True
+        r1b.font.name = "Calibri"
+        r1b.font.size = 120650
+        
+        # Deg line
+        e2 = copy.deepcopy(ref_edu_deg)
+        for r in e2.xpath('.//w:r'):
+            e2.remove(r)
+        body_elem.append(e2)
+        p2 = doc.paragraphs[-1]
+        r2a = p2.add_run(deg)
+        r2a.font.name = "Calibri"
+        r2a.font.size = 120650
+        r2tab = p2.add_run("\t")
+        r2tab.font.name = "Calibri"
+        r2b = p2.add_run(date_grade)
+        r2b.bold = True
+        r2b.font.name = "Calibri"
+        r2b.font.size = 120650
+
+    def add_exp_entry(org, loc, role, date, bullets):
+        e1 = copy.deepcopy(ref_exp_org)
+        for r in e1.xpath('.//w:r'):
+            e1.remove(r)
+        body_elem.append(e1)
+        p1 = doc.paragraphs[-1]
+        r1a = p1.add_run(org)
+        r1a.bold = True
+        r1a.font.name = "Calibri"
+        r1a.font.size = 120650
+        r1tab = p1.add_run("\t")
+        r1tab.font.name = "Calibri"
+        r1b = p1.add_run(loc)
+        r1b.bold = True
+        r1b.font.name = "Calibri"
+        r1b.font.size = 120650
+
+        e2 = copy.deepcopy(ref_exp_role)
+        for r in e2.xpath('.//w:r'):
+            e2.remove(r)
+        body_elem.append(e2)
+        p2 = doc.paragraphs[-1]
+        r2a = p2.add_run(f"Job Role: {role}")
+        r2a.italic = True
+        r2a.font.name = "Calibri"
+        r2a.font.size = 120650
+        r2tab = p2.add_run("\t")
+        r2tab.font.name = "Calibri"
+        r2b = p2.add_run(date)
+        r2b.italic = True
+        r2b.font.name = "Calibri"
+        r2b.font.size = 120650
+
+        for b in bullets:
+            add_bullet(b)
+
+    def add_project_entry(name_role, links, tech, bullets):
+        e1 = copy.deepcopy(ref_proj_title)
+        for r in e1.xpath('.//w:r'):
+            e1.remove(r)
+        body_elem.append(e1)
+        p1 = doc.paragraphs[-1]
+        r1a = p1.add_run(name_role)
+        r1a.bold = True
+        r1a.font.name = "Calibri"
+        r1a.font.size = 120650
+        r1tab = p1.add_run("\t")
+        r1tab.font.name = "Calibri"
+        r1b = p1.add_run(links)
+        r1b.font.name = "Calibri"
+        r1b.font.size = 120650
+
+        e2 = copy.deepcopy(ref_proj_tech)
+        for r in e2.xpath('.//w:r'):
+            e2.remove(r)
+        body_elem.append(e2)
+        p2 = doc.paragraphs[-1]
+        r2lbl = p2.add_run("Technology Stack: ")
+        r2lbl.bold = True
+        r2lbl.font.name = "Calibri"
+        r2lbl.font.size = 120650
+        r2val = p2.add_run(tech)
+        r2val.font.name = "Calibri"
+        r2val.font.size = 120650
+
+        for b in bullets:
+            add_bullet(b)
+
+    def add_skill_line(category, items):
+        e = copy.deepcopy(ref_skill)
+        for r in e.xpath('.//w:r'):
+            e.remove(r)
+        body_elem.append(e)
+        p = doc.paragraphs[-1]
+        r1 = p.add_run(category + ": ")
+        r1.bold = True
+        r1.font.name = "Calibri"
+        r1.font.size = 120650
+        r2 = p.add_run(items)
+        r2.font.name = "Calibri"
+        r2.font.size = 120650
+
+    def add_cert_line(text, cred_id):
+        e = copy.deepcopy(ref_cert)
+        for r in e.xpath('.//w:r'):
+            e.remove(r)
+        body_elem.append(e)
+        p = doc.paragraphs[-1]
+        r1 = p.add_run(text)
+        r1.font.name = "Calibri"
+        r1.font.size = 120650
+        rtab = p.add_run("\t")
+        rtab.font.name = "Calibri"
+        r2 = p.add_run(cred_id)
+        r2.font.name = "Calibri"
+        r2.font.size = 120650
+
+    def add_extra_line(text, year):
+        e = copy.deepcopy(ref_extra)
+        for r in e.xpath('.//w:r'):
+            e.remove(r)
+        body_elem.append(e)
+        p = doc.paragraphs[-1]
+        r1 = p.add_run(text)
+        r1.font.name = "Calibri"
+        r1.font.size = 120650
+        rtab = p.add_run("\t")
+        rtab.font.name = "Calibri"
+        r2 = p.add_run(year)
+        r2.font.name = "Calibri"
+        r2.font.size = 120650
+
+    def add_achieve_line(text, year):
+        e = copy.deepcopy(ref_achieve)
+        for r in e.xpath('.//w:r'):
+            e.remove(r)
+        body_elem.append(e)
+        p = doc.paragraphs[-1]
+        r1 = p.add_run(text)
+        r1.font.name = "Calibri"
+        r1.font.size = 120650
+        rtab = p.add_run("\t")
+        rtab.font.name = "Calibri"
+        r2 = p.add_run(year)
+        r2.font.name = "Calibri"
+        r2.font.size = 120650
+
+    # --- SECTION 1: CAREER OBJECTIVE ---
+    add_section_header("CAREER OBJECTIVE")
+    elem_obj = copy.deepcopy(ref_body)
+    for r in elem_obj.xpath('.//w:r'):
+        elem_obj.remove(r)
+    body_elem.append(elem_obj)
+    p_obj = doc.paragraphs[-1]
+    r_obj = p_obj.add_run(
+        "Full Stack & AI/ML Developer pursuing B.Tech in Computer Technology at RTMSSU with hands-on expertise building production web applications, multi-tenant institutional audit platforms, and local LLM agent workflows. Proficient across Python, JavaScript, TypeScript, React 19, NestJS, FastAPI, Prisma, MySQL, and Model Context Protocol (MCP) architectures. Seeking to leverage full-stack engineering and machine learning skills to build scalable software solutions that drive operational efficiency."
+    )
+    r_obj.font.name = "Calibri"
+    r_obj.font.size = 120650
+
+    # --- SECTION 2: EDUCATION ---
+    add_section_header("EDUCATION")
+    add_edu_entry(
+        "Ratan Tata Maharashtra State Skills University (RTMSSU)",
+        "Pune, Maharashtra",
+        "B.Tech in Computer Technology",
+        "2024 - 2027 (Pursuing)  |  CGPA - 5.9"
+    )
+    add_edu_entry(
+        "Zeal Polytechnic College",
+        "Pune, Maharashtra",
+        "MSBTE (Diploma in Computer Engineering)",
+        "2020 - 2023  |  Percentage - 72.97%"
+    )
+    add_edu_entry(
+        "Gagangiri School",
+        "Pune, Maharashtra",
+        "SSC (Secondary School Certificate)",
+        "2019 - 2020  |  Percentage - 75.00%"
+    )
+
+    # --- SECTION 3: WORK EXPERIENCE/INTERNSHIP ---
+    add_section_header("WORK EXPERIENCE/INTERNSHIP")
+    add_exp_entry(
+        "Whitecode Technologies / Whitecode AI",
+        "Pune, Maharashtra",
+        "Software Engineering Intern",
+        "July 2026 – Present",
+        [
+            "Built ClustorAudit, a full-stack institutional accreditation & audit platform (React 19, NestJS, Prisma, MySQL/MariaDB) for IQAC Cluster across 4 roles (Admin, Auditor, Institute, Coordinator), cutting audit turnaround by 60%.",
+            "Automated scoring rubrics, evidence validation, and dynamic PDF reports, reaching 98%+ compliance accuracy and optimizing REST APIs to reduce query latencies by 45%.",
+            "Architected an AI Mail Agent using FastAPI, React.js, and Ollama local LLMs for offline email triage, summarization, and Google API integrations, reducing manual processing by 65%."
+        ]
+    )
+    add_exp_entry(
+        "Esbee Company",
+        "Pune, Maharashtra",
+        "Quality Line Operator",
+        "July 2023 – April 2024",
+        [
+            "Conducted precision quality inspections and recorded defect data across assembly lines to maintain product compliance and zero defect spillover.",
+            "Identified recurring quality issues and reported actionable process improvements to optimize delivery."
+        ]
+    )
+    add_exp_entry(
+        "Delta Fire Company",
+        "Pune, Maharashtra",
+        "Maintenance Technician",
+        "January 2022 – June 2022",
+        [
+            "Maintained service logs and diagnostic checklists for industrial fire safety systems, achieving zero unplanned operational downtime."
+        ]
+    )
+
+    # --- SECTION 4: PROJECTS ---
+    add_section_header("PROJECTS")
+    add_project_entry(
+        "MahaSeva AI — Lead Developer",
+        "GitHub Link  |  Live Demo Link",
+        "Python | FastAPI | React.js | Ollama | Vector Search | NLP",
+        [
+            "Developed an AI-driven citizen welfare scheme discovery platform with multilingual semantic search and verified Maharashtra government links.",
+            "Implemented semantic vector matching with local LLMs to accurately match citizen demographics with relevant government welfare schemes.",
+            "Delivered sub-second recommendation responses with verified direct application links for Maharashtra citizens."
+        ]
+    )
+    add_project_entry(
+        "MK27 Gym Management System — Full Stack Developer",
+        "GitHub Link  |  Live Demo Link",
+        "MongoDB | Express.js | React.js | Node.js | JWT | bcrypt",
+        [
+            "Built a full-stack MERN web application for managing gym member lifecycle, plan subscriptions, billing ledgers, and membership status tracking.",
+            "Implemented secure user authentication and authorization using JWT and bcrypt, enforcing role-based access control across admin and member portals.",
+            "Designed RESTful API endpoints and optimized MongoDB aggregation pipelines, cutting financial record query response time by 40%."
+        ]
+    )
+    add_project_entry(
+        "AI Mail Agent — AI Developer",
+        "GitHub Link",
+        "Python | FastAPI | React.js | Ollama | Local LLMs | Google APIs",
+        [
+            "Engineered an offline-capable email triage assistant parsing email streams, auto-summarizing messages, and generating contextual draft replies.",
+            "Integrated Google Workspace APIs (Gmail, Sheets, Drive) with local Ollama models ensuring zero data leakage and 100% private data processing.",
+            "Streamlined inbound inbox processing, decreasing routine email management time by 65%."
+        ]
+    )
+    add_project_entry(
+        "GarbaSaathi Pune — Frontend Developer",
+        "GitHub Link  |  Live Demo Link",
+        "React.js | Vite | Tailwind CSS | Node.js",
+        [
+            "Created a responsive festival community platform for Garba dancers across Pune with interactive event discovery and circle matching.",
+            "Implemented real-time group formation and location-based venue directories optimized for high-traffic mobile users."
+        ]
+    )
+
+    # --- SECTION 5: SKILLS ---
+    add_section_header("SKILLS")
+    add_skill_line("Programming Languages", "Python, JavaScript, TypeScript, Java, SQL, HTML5, CSS3")
+    add_skill_line("Frameworks and Libraries", "React 19, React.js, NestJS, FastAPI, Express.js, Node.js, Flask, Tailwind CSS, Bootstrap, Prisma ORM")
+    add_skill_line("Databases", "MySQL, MariaDB, PostgreSQL, MongoDB, SQLite, SQLAlchemy")
+    add_skill_line("DevOps Framework", "Docker, Git, GitHub Actions, CI/CD Basics, Postman, Webhooks")
+    add_skill_line("Tools & Platform", "VS Code, Linux, Ollama, Model Context Protocol (MCP), Vite, Google Cloud APIs")
+    add_skill_line("Cloud Framework", "Google Cloud Platform (Gmail API, Sheets API, Drive API), Vercel, Render")
+    add_skill_line("Soft Skills", "Problem Solving, Team Collaboration, Technical Documentation, Critical Thinking, Adaptability")
+    add_skill_line("Spoken Languages", "English, Hindi, Marathi")
+
+    # --- SECTION 6: CERTIFICATIONS ---
+    add_section_header("CERTIFICATIONS")
+    add_cert_line("Claude 101: Foundation Certification - LLM & Generative AI via Anthropic, Sep 2026.", "Credential ID: ANTH-CLAUDE101")
+    add_cert_line("Model Context Protocol (MCP) - AI Agent Architecture via Anthropic, Sep 2026.", "Credential ID: ANTH-MCP-2026")
+    add_cert_line("IT Specialist: Artificial Intelligence - Artificial Intelligence via Certiport (Pearson VUE), Jul 2025.", "Credential ID: CERTI-AI-2025")
+    add_cert_line("Code; Without Barriers - Ethical AI Practice & Cloud via Microsoft, Jul 2025.", "Credential ID: MSFT-CWB-2025")
+    add_cert_line("Google AI Fundamentals - Artificial Intelligence via Google Career Certificates, Aug 2026.", "Credential ID: GOOG-AI-2026")
+    add_cert_line("Deep Learning with Certification - Deep Learning via Deep Learning Specialization, Nov 2025.", "Credential ID: DL-SPEC-2025")
+
+    # --- SECTION 7: EXTRA CURRICULAR ACTIVITIES ---
+    add_section_header("EXTRA CURRICULAR ACTIVITIES")
+    add_extra_line("Open-Source Contributor - Developed and maintained open-source developer tooling and AI agent workflows.", "2025 - 2026")
+    add_extra_line("Technical Workshops & Hackathons - Participated in university-level technical ideation events and AI seminars.", "2024 - 2026")
+
+    # --- SECTION 8: ACHIEVEMENTS ---
+    add_section_header("ACHIEVEMENTS")
+    add_achieve_line("National Innovation Showcase (Ideation & Innovation Program) - Recognized for technical ideation and AI project presentation.", "2026")
+    add_achieve_line("IQAC Cluster ClustorAudit Deployment - Engineered multi-tenant institutional accreditation platform adopted by educational institutions.", "2026")
+
+    # Save initial docx
+    temp_docx = os.path.join(OUTPUT_DIR, "temp_resume.docx")
+    doc.save(temp_docx)
+
+    # Now replace image2.jpg inside the zip with passport photo
+    photo_data = prepare_cropped_photo(PHOTO_PATH)
+
+    with zipfile.ZipFile(temp_docx, 'r') as zin:
+        with zipfile.ZipFile(DOCX_OUTPUT, 'w', compression=zipfile.ZIP_DEFLATED) as zout:
+            for item in zin.infolist():
+                if item.filename == "word/media/image2.jpg":
+                    zout.writestr(item, photo_data)
+                else:
+                    zout.writestr(item, zin.read(item.filename))
+
+    if os.path.exists(temp_docx):
+        os.remove(temp_docx)
+
+    print(f"Generated DOCX: {DOCX_OUTPUT}")
+
+    # Copy to public folder
+    public_docx = os.path.join(OUTPUT_DIR, "public", "Suraj_Dantarao_College_Resume.docx")
+    shutil.copy2(DOCX_OUTPUT, public_docx)
+    print(f"Copied to {public_docx}")
+
+    # Convert to PDF using MS Word COM
+    try:
+        import win32com.client
+        import pythoncom
+        pythoncom.CoInitialize()
+        word = win32com.client.DispatchEx("Word.Application")
+        word.Visible = False
+        doc_word = word.Documents.Open(os.path.abspath(DOCX_OUTPUT))
+        # 17 is wdExportFormatPDF
+        doc_word.ExportAsFixedFormat(
+            os.path.abspath(PDF_OUTPUT),
+            17,
+            OpenAfterExport=False,
+            OptimizeFor=0,
+            CreateBookmarks=1,
+            DocStructureTags=True
+        )
+        doc_word.Close(False)
+        word.Quit()
+        pythoncom.CoUninitialize()
+        print(f"Generated PDF: {PDF_OUTPUT}")
+
+        # Copy to public folder
+        public_pdf = os.path.join(OUTPUT_DIR, "public", "Suraj_Dantarao_College_Resume.pdf")
+        shutil.copy2(PDF_OUTPUT, public_pdf)
+        print(f"Copied to {public_pdf}")
+    except Exception as e:
+        print(f"Word COM conversion failed: {e}")
+
+if __name__ == "__main__":
+    build_resume()
