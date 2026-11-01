@@ -9,7 +9,7 @@ from docx.oxml.ns import qn
 import copy
 
 TEMPLATE_PATH = r"C:\Users\suraj\.gemini\antigravity\brain\5de19afe-d938-4733-8e07-309ffc6e6c5c\.user_uploaded\media_1793538243343_931fcabd.docx"
-PHOTO_PATH = r"C:\Users\suraj\Documents\portfolio\dist\assets\passport photo.jpeg"
+PHOTO_PATH = r"C:\Users\suraj\Documents\portfolio\public\passport photo.jpeg"
 OUTPUT_DIR = r"C:\Users\suraj\Documents\portfolio"
 DOCX_OUTPUT = os.path.join(OUTPUT_DIR, "Suraj_Dantarao_College_Resume.docx")
 PDF_OUTPUT = os.path.join(OUTPUT_DIR, "Suraj_Dantarao_College_Resume.pdf")
@@ -25,30 +25,65 @@ def prepare_cropped_photo(src_path):
     cropped.save(buf, format="JPEG", quality=95)
     return buf.getvalue()
 
-def set_run(run, text, bold=None, italic=None, font_name="Calibri", font_size=120650):
-    run.text = text
-    if bold is not None:
-        run.bold = bold
-    if italic is not None:
-        run.italic = italic
-    if font_name:
-        run.font.name = font_name
-    if font_size:
-        run.font.size = font_size
+def add_hyperlink(paragraph, url, text, color="0563C1", underline=True, bold=False, italic=False, font_name="Calibri", font_size=120650):
+    part = paragraph.part
+    r_id = part.relate_to(url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
 
-def create_element_clone(doc, base_p):
-    new_p_elem = copy.deepcopy(base_p._element)
-    # Clear runs in the cloned element
-    for r in new_p_elem.xpath('.//w:r'):
-        new_p_elem.remove(r)
-    return new_p_elem
+    hyperlink = OxmlElement('w:hyperlink')
+    hyperlink.set(qn('r:id'), r_id)
+
+    new_run = OxmlElement('w:r')
+    rPr = OxmlElement('w:rPr')
+
+    if font_name:
+        rFonts = OxmlElement('w:rFonts')
+        rFonts.set(qn('w:ascii'), font_name)
+        rFonts.set(qn('w:hAnsi'), font_name)
+        rFonts.set(qn('w:cs'), font_name)
+        rPr.append(rFonts)
+
+    if font_size:
+        # Correctly convert EMUs to half-points (1 pt = 12700 EMUs, 1 pt = 2 half-points)
+        hp = str(int(round((font_size / 12700.0) * 2)))
+        sz = OxmlElement('w:sz')
+        sz.set(qn('w:val'), hp)
+        rPr.append(sz)
+        szCs = OxmlElement('w:szCs')
+        szCs.set(qn('w:val'), hp)
+        rPr.append(szCs)
+
+    if color:
+        c = OxmlElement('w:color')
+        c.set(qn('w:val'), color)
+        rPr.append(c)
+
+    if underline:
+        u = OxmlElement('w:u')
+        u.set(qn('w:val'), 'single')
+        rPr.append(u)
+
+    if bold:
+        b = OxmlElement('w:b')
+        rPr.append(b)
+
+    if italic:
+        i = OxmlElement('w:i')
+        rPr.append(i)
+
+    new_run.append(rPr)
+    t = OxmlElement('w:t')
+    t.text = text
+    new_run.append(t)
+    hyperlink.append(new_run)
+
+    paragraph._element.append(hyperlink)
+    return hyperlink
 
 def build_resume():
     doc = docx.Document(TEMPLATE_PATH)
     
     # 1. Update Table 0 (Header)
     t0 = doc.tables[0]
-    # Cell 1 (Name and Degree)
     c1 = t0.rows[0].cells[1]
     p_name = c1.paragraphs[0]
     p_name.text = ""
@@ -66,47 +101,41 @@ def build_resume():
     r_deg.font.size = 152400  # 12pt
     p_deg.alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.CENTER
     
-    # 2. Update Table 1 (Contact info)
+    # 2. Update Table 1 (Contact info with CLICKABLE hyperlinks)
     t1 = doc.tables[1]
     p_contact = t1.rows[0].cells[0].paragraphs[0]
     p_contact.text = ""
     p_contact.alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.CENTER
-    
-    contact_parts = [
-        ("Pune, Maharashtra, India", False),
-        ("  |  ", False),
-        ("+91 8767753086", False),
-        ("  |  ", False),
-        ("surajdantrao0777@gmail.com", False),
-        ("  |  ", False),
-        ("https://linkedin.com/in/suraj-dantarao-b1b28b374", False),
-        ("  |  ", False),
-        ("https://github.com/surajdantarao", False)
-    ]
-    for text, bold in contact_parts:
-        r = p_contact.add_run(text)
-        r.font.name = "Calibri"
-        r.font.size = 114300  # 9pt
-        if bold:
-            r.bold = True
 
-    # 3. Reference paragraphs from template for exact styling cloning
-    # P2: Section Header (CAREER OBJECTIVE)
-    # P3: Objective Text
-    # P5: Education School line (bold tab bold)
-    # P6: Education Degree line (regular tab bold)
-    # P12: Experience Company line
-    # P13: Experience Role/Date line
-    # P14: Experience Bullet (ListParagraph with numId 2)
-    # P22: Project Name line
-    # P23: Project Tech line
-    # P24: Project Bullet
-    # P33: Skills line
-    # P42: Certification line
-    # P46: Extracurricular line
-    # P48: Achievements Header
-    # P49: Achievement line
+    r = p_contact.add_run("Pune, Maharashtra, India")
+    r.font.name = "Calibri"
+    r.font.size = 114300  # 9pt
     
+    r_sep = p_contact.add_run("  |  ")
+    r_sep.font.name = "Calibri"
+    r_sep.font.size = 114300
+    
+    add_hyperlink(p_contact, "tel:+918767753086", "+91 8767753086", color="0563C1", underline=True, font_size=114300)
+    
+    r_sep = p_contact.add_run("  |  ")
+    r_sep.font.name = "Calibri"
+    r_sep.font.size = 114300
+
+    add_hyperlink(p_contact, "mailto:surajdantrao0777@gmail.com", "surajdantrao0777@gmail.com", color="0563C1", underline=True, font_size=114300)
+
+    r_sep = p_contact.add_run("  |  ")
+    r_sep.font.name = "Calibri"
+    r_sep.font.size = 114300
+
+    add_hyperlink(p_contact, "https://linkedin.com/in/suraj-dantarao-b1b28b374", "LinkedIn Profile", color="0563C1", underline=True, font_size=114300)
+
+    r_sep = p_contact.add_run("  |  ")
+    r_sep.font.name = "Calibri"
+    r_sep.font.size = 114300
+
+    add_hyperlink(p_contact, "https://github.com/surajdantarao", "GitHub Profile", color="0563C1", underline=True, font_size=114300)
+
+    # Reference elements from template
     ref_header = doc.paragraphs[2]._element
     ref_body = doc.paragraphs[3]._element
     ref_edu_org = doc.paragraphs[5]._element
@@ -121,7 +150,6 @@ def build_resume():
     ref_extra = doc.paragraphs[46]._element
     ref_achieve = doc.paragraphs[49]._element
     
-    # Store all paragraph elements to remove from P2 onwards
     body_elem = doc._body._element
     paragraphs_to_remove = [p._element for p in doc.paragraphs[2:]]
     for p_elem in paragraphs_to_remove:
@@ -145,10 +173,9 @@ def build_resume():
         p = doc.paragraphs[-1]
         r = p.add_run(text)
         r.font.name = "Calibri"
-        r.font.size = 120650  # 9.5pt
+        r.font.size = 120650
         
     def add_edu_entry(org, loc, deg, date_grade):
-        # Org line
         e1 = copy.deepcopy(ref_edu_org)
         for r in e1.xpath('.//w:r'):
             e1.remove(r)
@@ -165,7 +192,6 @@ def build_resume():
         r1b.font.name = "Calibri"
         r1b.font.size = 120650
         
-        # Deg line
         e2 = copy.deepcopy(ref_edu_deg)
         for r in e2.xpath('.//w:r'):
             e2.remove(r)
@@ -217,7 +243,7 @@ def build_resume():
         for b in bullets:
             add_bullet(b)
 
-    def add_project_entry(name_role, links, tech, bullets):
+    def add_project_entry(name_role, github_url, demo_url, tech, bullets):
         e1 = copy.deepcopy(ref_proj_title)
         for r in e1.xpath('.//w:r'):
             e1.remove(r)
@@ -229,9 +255,18 @@ def build_resume():
         r1a.font.size = 120650
         r1tab = p1.add_run("\t")
         r1tab.font.name = "Calibri"
-        r1b = p1.add_run(links)
-        r1b.font.name = "Calibri"
-        r1b.font.size = 120650
+        
+        # Clickable links
+        if github_url and demo_url:
+            add_hyperlink(p1, github_url, "GitHub Link", color="0563C1", underline=True, font_size=120650)
+            r_pipe = p1.add_run("  |  ")
+            r_pipe.font.name = "Calibri"
+            r_pipe.font.size = 120650
+            add_hyperlink(p1, demo_url, "Live Demo Link", color="0563C1", underline=True, font_size=120650)
+        elif github_url:
+            add_hyperlink(p1, github_url, "GitHub Link", color="0563C1", underline=True, font_size=120650)
+        elif demo_url:
+            add_hyperlink(p1, demo_url, "Live Demo Link", color="0563C1", underline=True, font_size=120650)
 
         e2 = copy.deepcopy(ref_proj_tech)
         for r in e2.xpath('.//w:r'):
@@ -316,7 +351,7 @@ def build_resume():
     body_elem.append(elem_obj)
     p_obj = doc.paragraphs[-1]
     r_obj = p_obj.add_run(
-        "Full Stack & AI/ML Developer pursuing B.Tech in Computer Technology at RTMSSU with hands-on expertise building production web applications, multi-tenant institutional audit platforms, and local LLM agent workflows. Proficient across Python, JavaScript, TypeScript, React 19, NestJS, FastAPI, Prisma, MySQL, and Model Context Protocol (MCP) architectures. Seeking to leverage full-stack engineering and machine learning skills to build scalable software solutions that drive operational efficiency."
+        "Full Stack & AI/ML Developer pursuing B.Tech in Computer Technology at RTMSSU with hands-on expertise building production web applications, multi-tenant institutional audit platforms, and local LLM agent workflows. Proficient across Python, JavaScript, TypeScript, React 19, NestJS, FastAPI, Prisma, MySQL, and Model Context Protocol (MCP) architectures. Seeking to leverage technical skills in machine learning, full-stack engineering, and workflow automation to build scalable software solutions that drive operational efficiency."
     )
     r_obj.font.name = "Calibri"
     r_obj.font.size = 120650
@@ -375,11 +410,12 @@ def build_resume():
         ]
     )
 
-    # --- SECTION 4: PROJECTS ---
+    # --- SECTION 4: PROJECTS (GarbaSaathi removed, only 3 high-impact technical projects) ---
     add_section_header("PROJECTS")
     add_project_entry(
         "MahaSeva AI — Lead Developer",
-        "GitHub Link  |  Live Demo Link",
+        "https://github.com/surajdantarao/MahaSeva-AI.git",
+        "https://maha-seva-ai.vercel.app/",
         "Python | FastAPI | React.js | Ollama | Vector Search | NLP",
         [
             "Developed an AI-driven citizen welfare scheme discovery platform with multilingual semantic search and verified Maharashtra government links.",
@@ -389,7 +425,8 @@ def build_resume():
     )
     add_project_entry(
         "MK27 Gym Management System — Full Stack Developer",
-        "GitHub Link  |  Live Demo Link",
+        "https://github.com/surajdantarao/MK27-GYM",
+        "https://mk-27-gym.vercel.app/",
         "MongoDB | Express.js | React.js | Node.js | JWT | bcrypt",
         [
             "Built a full-stack MERN web application for managing gym member lifecycle, plan subscriptions, billing ledgers, and membership status tracking.",
@@ -399,21 +436,13 @@ def build_resume():
     )
     add_project_entry(
         "AI Mail Agent — AI Developer",
-        "GitHub Link",
-        "Python | FastAPI | React.js | Ollama | Local LLMs | Google APIs",
+        "https://github.com/surajdantarao/AI-Mail-agent",
+        None,
+        "Python | FastAPI | React.js | Ollama | Local LLMs | Google Workspace APIs",
         [
             "Engineered an offline-capable email triage assistant parsing email streams, auto-summarizing messages, and generating contextual draft replies.",
             "Integrated Google Workspace APIs (Gmail, Sheets, Drive) with local Ollama models ensuring zero data leakage and 100% private data processing.",
             "Streamlined inbound inbox processing, decreasing routine email management time by 65%."
-        ]
-    )
-    add_project_entry(
-        "GarbaSaathi Pune — Frontend Developer",
-        "GitHub Link  |  Live Demo Link",
-        "React.js | Vite | Tailwind CSS | Node.js",
-        [
-            "Created a responsive festival community platform for Garba dancers across Pune with interactive event discovery and circle matching.",
-            "Implemented real-time group formation and location-based venue directories optimized for high-traffic mobile users."
         ]
     )
 
@@ -447,11 +476,9 @@ def build_resume():
     add_achieve_line("National Innovation Showcase (Ideation & Innovation Program) - Recognized for technical ideation and AI project presentation.", "2026")
     add_achieve_line("IQAC Cluster ClustorAudit Deployment - Engineered multi-tenant institutional accreditation platform adopted by educational institutions.", "2026")
 
-    # Save initial docx
     temp_docx = os.path.join(OUTPUT_DIR, "temp_resume.docx")
     doc.save(temp_docx)
 
-    # Now replace image2.jpg inside the zip with passport photo
     photo_data = prepare_cropped_photo(PHOTO_PATH)
 
     with zipfile.ZipFile(temp_docx, 'r') as zin:
@@ -467,39 +494,33 @@ def build_resume():
 
     print(f"Generated DOCX: {DOCX_OUTPUT}")
 
-    # Copy to public folder
     public_docx = os.path.join(OUTPUT_DIR, "public", "Suraj_Dantarao_College_Resume.docx")
     shutil.copy2(DOCX_OUTPUT, public_docx)
     print(f"Copied to {public_docx}")
 
-    # Convert to PDF using MS Word COM
-    try:
-        import win32com.client
-        import pythoncom
-        pythoncom.CoInitialize()
-        word = win32com.client.DispatchEx("Word.Application")
-        word.Visible = False
-        doc_word = word.Documents.Open(os.path.abspath(DOCX_OUTPUT))
-        # 17 is wdExportFormatPDF
-        doc_word.ExportAsFixedFormat(
-            os.path.abspath(PDF_OUTPUT),
-            17,
-            OpenAfterExport=False,
-            OptimizeFor=0,
-            CreateBookmarks=1,
-            DocStructureTags=True
-        )
-        doc_word.Close(False)
-        word.Quit()
-        pythoncom.CoUninitialize()
-        print(f"Generated PDF: {PDF_OUTPUT}")
+    # Convert to PDF via MS Word COM
+    import win32com.client
+    import pythoncom
+    pythoncom.CoInitialize()
+    word = win32com.client.DispatchEx("Word.Application")
+    word.Visible = False
+    doc_word = word.Documents.Open(os.path.abspath(DOCX_OUTPUT))
+    doc_word.ExportAsFixedFormat(
+        os.path.abspath(PDF_OUTPUT),
+        17,
+        OpenAfterExport=False,
+        OptimizeFor=0,
+        CreateBookmarks=1,
+        DocStructureTags=True
+    )
+    doc_word.Close(False)
+    word.Quit()
+    pythoncom.CoUninitialize()
+    print(f"Generated PDF: {PDF_OUTPUT}")
 
-        # Copy to public folder
-        public_pdf = os.path.join(OUTPUT_DIR, "public", "Suraj_Dantarao_College_Resume.pdf")
-        shutil.copy2(PDF_OUTPUT, public_pdf)
-        print(f"Copied to {public_pdf}")
-    except Exception as e:
-        print(f"Word COM conversion failed: {e}")
+    public_pdf = os.path.join(OUTPUT_DIR, "public", "Suraj_Dantarao_College_Resume.pdf")
+    shutil.copy2(PDF_OUTPUT, public_pdf)
+    print(f"Copied to {public_pdf}")
 
 if __name__ == "__main__":
     build_resume()
