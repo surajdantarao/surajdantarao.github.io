@@ -43,7 +43,6 @@ def add_hyperlink(paragraph, url, text, color="0563C1", underline=True, bold=Fal
         rPr.append(rFonts)
 
     if font_size:
-        # Correctly convert EMUs to half-points (1 pt = 12700 EMUs, 1 pt = 2 half-points)
         hp = str(int(round((font_size / 12700.0) * 2)))
         sz = OxmlElement('w:sz')
         sz.set(qn('w:val'), hp)
@@ -410,8 +409,10 @@ def build_resume():
         ]
     )
 
-    # --- SECTION 4: PROJECTS (GarbaSaathi removed, only 3 high-impact technical projects) ---
+    # --- SECTION 4: PROJECTS (All 7 technical projects from portfolio, excluding GarbaSaathi) ---
     add_section_header("PROJECTS")
+    
+    # 1. MahaSeva AI
     add_project_entry(
         "MahaSeva AI — Lead Developer",
         "https://github.com/surajdantarao/MahaSeva-AI.git",
@@ -423,6 +424,8 @@ def build_resume():
             "Delivered sub-second recommendation responses with verified direct application links for Maharashtra citizens."
         ]
     )
+
+    # 2. MK27 Gym Management System
     add_project_entry(
         "MK27 Gym Management System — Full Stack Developer",
         "https://github.com/surajdantarao/MK27-GYM",
@@ -434,6 +437,8 @@ def build_resume():
             "Designed RESTful API endpoints and optimized MongoDB aggregation pipelines, cutting financial record query response time by 40%."
         ]
     )
+
+    # 3. AI Mail Agent
     add_project_entry(
         "AI Mail Agent — AI Developer",
         "https://github.com/surajdantarao/AI-Mail-agent",
@@ -443,6 +448,54 @@ def build_resume():
             "Engineered an offline-capable email triage assistant parsing email streams, auto-summarizing messages, and generating contextual draft replies.",
             "Integrated Google Workspace APIs (Gmail, Sheets, Drive) with local Ollama models ensuring zero data leakage and 100% private data processing.",
             "Streamlined inbound inbox processing, decreasing routine email management time by 65%."
+        ]
+    )
+
+    # 4. Guest Lecture & Visitor Management System
+    add_project_entry(
+        "Guest Lecture & Visitor Management System — Full Stack Developer",
+        "https://github.com/surajdantarao/guest-leacture",
+        "https://guest-leacture.vercel.app/",
+        "React.js | Node.js | Express.js | MySQL | Bootstrap",
+        [
+            "Created a digital academic portal for logging campus visitor entries, scheduling guest lectures, managing speaker profiles, and archiving feedback.",
+            "Implemented role-based administrative dashboards with automated record management and query latency reduction."
+        ]
+    )
+
+    # 5. Spam Detection System
+    add_project_entry(
+        "Spam Detection System — ML Engineer",
+        "https://github.com/surajdantarao/spam-detection-.git",
+        None,
+        "Python | Flask | Scikit-learn | NLP | TF-IDF | Naive Bayes",
+        [
+            "Developed an ML classification web app to classify SMS and messages as spam/ham using Multinomial Naive Bayes and TF-IDF vectorization.",
+            "Achieved ~97% classification accuracy with structured text preprocessing pipelines, tokenization, and stop-word filtering."
+        ]
+    )
+
+    # 6. Task Sheet Automation
+    add_project_entry(
+        "Task Sheet Automation — Backend Developer",
+        "https://github.com/surajdantarao/task-sheet-automation.git",
+        None,
+        "Python | FastAPI | Google Sheets API | Webhooks | Task Queues",
+        [
+            "Architected an automated two-way workflow synchronization engine between internal database records and Google Sheets via webhooks.",
+            "Eliminated manual spreadsheet data entry with scheduled background queues and automated webhook event handlers."
+        ]
+    )
+
+    # 7. QR-Based Hyperlocal Store Platform
+    add_project_entry(
+        "QR-Based Hyperlocal Store Platform — Full Stack Developer",
+        "https://github.com/surajdantarao/qr-store",
+        "https://qr-store.onrender.com/",
+        "Python | Flask | SQLite | React | SQLAlchemy",
+        [
+            "Developed a QR-driven digital storefront for local shopkeepers featuring live product catalogs, merchant dashboards, and order tracking.",
+            "Implemented seller dashboard with real-time order status updates and fast mobile browsing for customers."
         ]
     )
 
