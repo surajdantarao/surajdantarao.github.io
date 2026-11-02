@@ -18,10 +18,11 @@ PDF_OUTPUT = os.path.join(OUTPUT_DIR, "Suraj_Dantarao_College_Resume.pdf")
 def prepare_cropped_photo(src_path):
     im = Image.open(src_path)
     w, h = im.size
-    crop_size = min(w, h)
-    top = int((h - crop_size) * 0.25)
-    bottom = top + crop_size
-    cropped = im.crop((0, top, crop_size, bottom))
+    # Match the college logo aspect ratio (933450 / 717247 = 1.3014)
+    target_ratio = 933450.0 / 717247.0
+    crop_h = int(w / target_ratio)
+    top = int((h - crop_h) * 0.18)
+    cropped = im.crop((0, top, w, top + crop_h))
     buf = io.BytesIO()
     cropped.save(buf, format="JPEG", quality=95)
     return buf.getvalue()
@@ -105,44 +106,56 @@ def build_resume():
     r_deg.font.name = "Calibri"
     r_deg.font.size = 152400  # 12pt
     p_deg.alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.CENTER
-    
-    # 2. Update Table 1 (Contact bar with Portfolio link & all clickable hyperlinks)
-    t1 = doc.tables[1]
-    p_contact = t1.rows[0].cells[0].paragraphs[0]
-    p_contact.text = ""
-    p_contact.alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.CENTER
 
-    # Location
-    r = p_contact.add_run("Pune, Maharashtra, India")
-    r.font.name = "Calibri"
-    r.font.size = 114300  # 9pt
+    # Update Table 0 Cell 2 (Profile Photo) to match college logo dimensions (cx: 933450, cy: 717247)
+    c2 = t0.rows[0].cells[2]
+    for ext in c2._tc.xpath('.//wp:extent | .//a:ext'):
+        ext.attrib['cx'] = '933450'
+        ext.attrib['cy'] = '717247'
     
-    # Separator helper
-    def add_sep():
-        s = p_contact.add_run("  |  ")
+    # 2. Update Table 1 (Contact bar with actual clickable URL links)
+    t1 = doc.tables[1]
+    p_contact1 = t1.rows[0].cells[0].paragraphs[0]
+    p_contact1.text = ""
+    p_contact1.alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.CENTER
+    p_contact1.paragraph_format.space_before = docx.shared.Pt(0)
+    p_contact1.paragraph_format.space_after = docx.shared.Pt(1)
+
+    # Line 1: Location | Phone | Email
+    r_loc = p_contact1.add_run("Pune, Maharashtra, India")
+    r_loc.font.name = "Calibri"
+    r_loc.font.size = 114300  # 9pt
+
+    def add_sep(p):
+        s = p.add_run("  |  ")
         s.font.name = "Calibri"
         s.font.size = 114300
         return s
 
-    add_sep()
+    add_sep(p_contact1)
     # Phone (clickable)
-    add_hyperlink(p_contact, "tel:+918767753086", "+91 8767753086", color="0563C1", underline=True, font_size=114300)
+    add_hyperlink(p_contact1, "tel:+918767753086", "+91 8767753086", color="0563C1", underline=True, font_size=114300)
     
-    add_sep()
+    add_sep(p_contact1)
     # Email (clickable)
-    add_hyperlink(p_contact, "mailto:surajdantrao0777@gmail.com", "surajdantrao0777@gmail.com", color="0563C1", underline=True, font_size=114300)
+    add_hyperlink(p_contact1, "mailto:surajdantrao0777@gmail.com", "surajdantrao0777@gmail.com", color="0563C1", underline=True, font_size=114300)
 
-    add_sep()
-    # Portfolio Link (clickable)
-    add_hyperlink(p_contact, "https://surajdantarao.github.io", "Portfolio", color="0563C1", underline=True, font_size=114300)
+    # Line 2: Actual links for Portfolio | LinkedIn | GitHub
+    p_contact2 = t1.rows[0].cells[0].add_paragraph()
+    p_contact2.alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.CENTER
+    p_contact2.paragraph_format.space_before = docx.shared.Pt(1)
+    p_contact2.paragraph_format.space_after = docx.shared.Pt(0)
 
-    add_sep()
-    # LinkedIn Profile (clickable)
-    add_hyperlink(p_contact, "https://linkedin.com/in/suraj-dantarao-b1b28b374", "LinkedIn", color="0563C1", underline=True, font_size=114300)
+    # Actual Portfolio Link (clickable)
+    add_hyperlink(p_contact2, "https://surajdantarao.github.io", "https://surajdantarao.github.io", color="0563C1", underline=True, font_size=114300)
 
-    add_sep()
-    # GitHub Profile (clickable)
-    add_hyperlink(p_contact, "https://github.com/surajdantarao", "GitHub", color="0563C1", underline=True, font_size=114300)
+    add_sep(p_contact2)
+    # Actual LinkedIn Profile (clickable)
+    add_hyperlink(p_contact2, "https://linkedin.com/in/suraj-dantarao-b1b28b374", "https://linkedin.com/in/suraj-dantarao-b1b28b374", color="0563C1", underline=True, font_size=114300)
+
+    add_sep(p_contact2)
+    # Actual GitHub Profile (clickable)
+    add_hyperlink(p_contact2, "https://github.com/surajdantarao", "https://github.com/surajdantarao", color="0563C1", underline=True, font_size=114300)
 
     # Reference elements from template
     ref_header = doc.paragraphs[2]._element
