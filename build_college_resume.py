@@ -2,6 +2,7 @@ import os
 import zipfile
 import io
 import shutil
+import urllib.parse
 from PIL import Image
 import docx
 from docx.oxml import OxmlElement
@@ -100,39 +101,43 @@ def build_resume():
     r_deg.font.size = 152400  # 12pt
     p_deg.alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.CENTER
     
-    # 2. Update Table 1 (Contact info with CLICKABLE hyperlinks)
+    # 2. Update Table 1 (Contact bar with Portfolio link & all clickable hyperlinks)
     t1 = doc.tables[1]
     p_contact = t1.rows[0].cells[0].paragraphs[0]
     p_contact.text = ""
     p_contact.alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.CENTER
 
+    # Location
     r = p_contact.add_run("Pune, Maharashtra, India")
     r.font.name = "Calibri"
     r.font.size = 114300  # 9pt
     
-    r_sep = p_contact.add_run("  |  ")
-    r_sep.font.name = "Calibri"
-    r_sep.font.size = 114300
-    
+    # Separator helper
+    def add_sep():
+        s = p_contact.add_run("  |  ")
+        s.font.name = "Calibri"
+        s.font.size = 114300
+        return s
+
+    add_sep()
+    # Phone (clickable)
     add_hyperlink(p_contact, "tel:+918767753086", "+91 8767753086", color="0563C1", underline=True, font_size=114300)
     
-    r_sep = p_contact.add_run("  |  ")
-    r_sep.font.name = "Calibri"
-    r_sep.font.size = 114300
-
+    add_sep()
+    # Email (clickable)
     add_hyperlink(p_contact, "mailto:surajdantrao0777@gmail.com", "surajdantrao0777@gmail.com", color="0563C1", underline=True, font_size=114300)
 
-    r_sep = p_contact.add_run("  |  ")
-    r_sep.font.name = "Calibri"
-    r_sep.font.size = 114300
+    add_sep()
+    # Portfolio Link (clickable)
+    add_hyperlink(p_contact, "https://surajdantarao.github.io", "Portfolio", color="0563C1", underline=True, font_size=114300)
 
-    add_hyperlink(p_contact, "https://linkedin.com/in/suraj-dantarao-b1b28b374", "LinkedIn Profile", color="0563C1", underline=True, font_size=114300)
+    add_sep()
+    # LinkedIn Profile (clickable)
+    add_hyperlink(p_contact, "https://linkedin.com/in/suraj-dantarao-b1b28b374", "LinkedIn", color="0563C1", underline=True, font_size=114300)
 
-    r_sep = p_contact.add_run("  |  ")
-    r_sep.font.name = "Calibri"
-    r_sep.font.size = 114300
-
-    add_hyperlink(p_contact, "https://github.com/surajdantarao", "GitHub Profile", color="0563C1", underline=True, font_size=114300)
+    add_sep()
+    # GitHub Profile (clickable)
+    add_hyperlink(p_contact, "https://github.com/surajdantarao", "GitHub", color="0563C1", underline=True, font_size=114300)
 
     # Reference elements from template
     ref_header = doc.paragraphs[2]._element
@@ -145,9 +150,6 @@ def build_resume():
     ref_proj_title = doc.paragraphs[22]._element
     ref_proj_tech = doc.paragraphs[23]._element
     ref_skill = doc.paragraphs[33]._element
-    ref_cert = doc.paragraphs[42]._element
-    ref_extra = doc.paragraphs[46]._element
-    ref_achieve = doc.paragraphs[49]._element
     
     body_elem = doc._body._element
     paragraphs_to_remove = [p._element for p in doc.paragraphs[2:]]
@@ -173,6 +175,41 @@ def build_resume():
         r = p.add_run(text)
         r.font.name = "Calibri"
         r.font.size = 120650
+        return p
+
+    def add_bullet_point_lead(bold_lead, body_text):
+        elem = copy.deepcopy(ref_bullet)
+        for r in elem.xpath('.//w:r'):
+            elem.remove(r)
+        body_elem.append(elem)
+        p = doc.paragraphs[-1]
+        r1 = p.add_run(bold_lead)
+        r1.bold = True
+        r1.font.name = "Calibri"
+        r1.font.size = 120650
+        r2 = p.add_run(body_text)
+        r2.font.name = "Calibri"
+        r2.font.size = 120650
+        return p
+
+    def add_bullet_point_with_link(bold_lead, body_text, link_text, link_url):
+        elem = copy.deepcopy(ref_bullet)
+        for r in elem.xpath('.//w:r'):
+            elem.remove(r)
+        body_elem.append(elem)
+        p = doc.paragraphs[-1]
+        r1 = p.add_run(bold_lead)
+        r1.bold = True
+        r1.font.name = "Calibri"
+        r1.font.size = 120650
+        r2 = p.add_run(body_text + " — [")
+        r2.font.name = "Calibri"
+        r2.font.size = 120650
+        add_hyperlink(p, link_url, link_text, color="0563C1", underline=True, font_size=120650)
+        r3 = p.add_run("]")
+        r3.font.name = "Calibri"
+        r3.font.size = 120650
+        return p
         
     def add_edu_entry(org, loc, deg, date_grade):
         e1 = copy.deepcopy(ref_edu_org)
@@ -294,51 +331,6 @@ def build_resume():
         r1.font.name = "Calibri"
         r1.font.size = 120650
         r2 = p.add_run(items)
-        r2.font.name = "Calibri"
-        r2.font.size = 120650
-
-    def add_cert_line(text, cred_id):
-        e = copy.deepcopy(ref_cert)
-        for r in e.xpath('.//w:r'):
-            e.remove(r)
-        body_elem.append(e)
-        p = doc.paragraphs[-1]
-        r1 = p.add_run(text)
-        r1.font.name = "Calibri"
-        r1.font.size = 120650
-        rtab = p.add_run("\t")
-        rtab.font.name = "Calibri"
-        r2 = p.add_run(cred_id)
-        r2.font.name = "Calibri"
-        r2.font.size = 120650
-
-    def add_extra_line(text, year):
-        e = copy.deepcopy(ref_extra)
-        for r in e.xpath('.//w:r'):
-            e.remove(r)
-        body_elem.append(e)
-        p = doc.paragraphs[-1]
-        r1 = p.add_run(text)
-        r1.font.name = "Calibri"
-        r1.font.size = 120650
-        rtab = p.add_run("\t")
-        rtab.font.name = "Calibri"
-        r2 = p.add_run(year)
-        r2.font.name = "Calibri"
-        r2.font.size = 120650
-
-    def add_achieve_line(text, year):
-        e = copy.deepcopy(ref_achieve)
-        for r in e.xpath('.//w:r'):
-            e.remove(r)
-        body_elem.append(e)
-        p = doc.paragraphs[-1]
-        r1 = p.add_run(text)
-        r1.font.name = "Calibri"
-        r1.font.size = 120650
-        rtab = p.add_run("\t")
-        rtab.font.name = "Calibri"
-        r2 = p.add_run(year)
         r2.font.name = "Calibri"
         r2.font.size = 120650
 
@@ -510,24 +502,68 @@ def build_resume():
     add_skill_line("Soft Skills", "Problem Solving, Team Collaboration, Technical Documentation, Critical Thinking, Adaptability")
     add_skill_line("Spoken Languages", "English, Hindi, Marathi")
 
-    # --- SECTION 6: CERTIFICATIONS ---
+    # --- SECTION 6: CERTIFICATIONS (Point-wise with clickable links to verified certificates) ---
     add_section_header("CERTIFICATIONS")
-    add_cert_line("Claude 101: Foundation Certification - LLM & Generative AI via Anthropic, Sep 2026.", "Credential ID: ANTH-CLAUDE101")
-    add_cert_line("Model Context Protocol (MCP) - AI Agent Architecture via Anthropic, Sep 2026.", "Credential ID: ANTH-MCP-2026")
-    add_cert_line("IT Specialist: Artificial Intelligence - Artificial Intelligence via Certiport (Pearson VUE), Jul 2025.", "Credential ID: CERTI-AI-2025")
-    add_cert_line("Code; Without Barriers - Ethical AI Practice & Cloud via Microsoft, Jul 2025.", "Credential ID: MSFT-CWB-2025")
-    add_cert_line("Google AI Fundamentals - Artificial Intelligence via Google Career Certificates, Aug 2026.", "Credential ID: GOOG-AI-2026")
-    add_cert_line("Deep Learning with Certification - Deep Learning via Deep Learning Specialization, Nov 2025.", "Credential ID: DL-SPEC-2025")
+    add_bullet_point_with_link(
+        "Claude 101: Foundation Certification",
+        " — LLM & Generative AI via Anthropic (Sep 2026). Credential ID: ANTH-CLAUDE101",
+        "View Certificate",
+        "https://surajdantarao.github.io/certificates/Antropic%20Claude%20101%20.pdf"
+    )
+    add_bullet_point_with_link(
+        "Model Context Protocol (MCP)",
+        " — AI Agent Architecture via Anthropic (Sep 2026). Credential ID: ANTH-MCP-2026",
+        "View Certificate",
+        "https://surajdantarao.github.io/certificates/Antropic%20MCP.pdf"
+    )
+    add_bullet_point_with_link(
+        "IT Specialist: Artificial Intelligence",
+        " — Artificial Intelligence via Certiport / Pearson VUE (Jul 2025). Credential ID: CERTI-AI-2025",
+        "View Certificate",
+        "https://surajdantarao.github.io/certificates/Artificial%20Intelliagence%20Certiport.pdf"
+    )
+    add_bullet_point_with_link(
+        "Code; Without Barriers",
+        " — Ethical AI Practice & Cloud via Microsoft (Jul 2025). Credential ID: MSFT-CWB-2025",
+        "View Certificate",
+        "https://surajdantarao.github.io/certificates/Code%20without%20barriour%20microsoft.pdf"
+    )
+    add_bullet_point_with_link(
+        "Google AI Fundamentals",
+        " — Artificial Intelligence via Google Career Certificates (Aug 2026). Credential ID: GOOG-AI-2026",
+        "View Certificate",
+        "https://surajdantarao.github.io/certificates/AI-Fundamntals%20Google%20.jpeg"
+    )
+    add_bullet_point_with_link(
+        "Deep Learning with Certification",
+        " — Deep Learning via Deep Learning Specialization (Nov 2025). Credential ID: DL-SPEC-2025",
+        "View Certificate",
+        "https://surajdantarao.github.io/certificates/Deep%20Learning%20with%20Certification.pdf"
+    )
 
-    # --- SECTION 7: EXTRA CURRICULAR ACTIVITIES ---
+    # --- SECTION 7: EXTRA CURRICULAR ACTIVITIES (Point-wise) ---
     add_section_header("EXTRA CURRICULAR ACTIVITIES")
-    add_extra_line("Open-Source Contributor - Developed and maintained open-source developer tooling and AI agent workflows.", "2025 - 2026")
-    add_extra_line("Technical Workshops & Hackathons - Participated in university-level technical ideation events and AI seminars.", "2024 - 2026")
+    add_bullet_point_lead(
+        "Open-Source Contributor: ",
+        "Developed and maintained open-source developer tooling, AI mail agents, and web applications. (2025 - 2026)"
+    )
+    add_bullet_point_lead(
+        "Technical Workshops & Ideation: ",
+        "Participated in university and state-level technical ideation events, hackathons, and AI seminars. (2024 - 2026)"
+    )
 
-    # --- SECTION 8: ACHIEVEMENTS ---
+    # --- SECTION 8: ACHIEVEMENTS (Point-wise with clickable certificate link) ---
     add_section_header("ACHIEVEMENTS")
-    add_achieve_line("National Innovation Showcase (Ideation & Innovation Program) - Recognized for technical ideation and AI project presentation.", "2026")
-    add_achieve_line("IQAC Cluster ClustorAudit Deployment - Engineered multi-tenant institutional accreditation platform adopted by educational institutions.", "2026")
+    add_bullet_point_with_link(
+        "National Innovation Showcase (Ideation & Innovation Program): ",
+        "Recognized for AI project presentation and technical innovation. (2026)",
+        "View Certificate",
+        "https://surajdantarao.github.io/certificates/Suraj_Dantarao%20Ideation.pdf"
+    )
+    add_bullet_point_lead(
+        "IQAC Cluster ClustorAudit Deployment: ",
+        "Engineered multi-tenant institutional accreditation and audit system adopted by educational institutions. (2026)"
+    )
 
     temp_docx = os.path.join(OUTPUT_DIR, "temp_resume.docx")
     doc.save(temp_docx)
