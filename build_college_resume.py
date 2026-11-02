@@ -81,6 +81,11 @@ def add_hyperlink(paragraph, url, text, color="0563C1", underline=True, bold=Fal
 
 def build_resume():
     doc = docx.Document(TEMPLATE_PATH)
+    for s in doc.sections:
+        s.top_margin = docx.shared.Inches(0.3)
+        s.bottom_margin = docx.shared.Inches(0.3)
+        s.left_margin = docx.shared.Inches(0.5)
+        s.right_margin = docx.shared.Inches(0.5)
     
     # 1. Update Table 0 (Header)
     t0 = doc.tables[0]
@@ -279,12 +284,15 @@ def build_resume():
         for b in bullets:
             add_bullet(b)
 
-    def add_project_entry(name_role, github_url, demo_url, tech, bullets):
+    def add_project_entry(name_role, github_url, demo_url, tech, bullets, page_break_before=False):
         e1 = copy.deepcopy(ref_proj_title)
         for r in e1.xpath('.//w:r'):
             e1.remove(r)
         body_elem.append(e1)
         p1 = doc.paragraphs[-1]
+        if page_break_before:
+            p1.paragraph_format.page_break_before = True
+        p1.paragraph_format.keep_with_next = True
         r1a = p1.add_run(name_role)
         r1a.bold = True
         r1a.font.name = "Calibri"
@@ -430,7 +438,7 @@ def build_resume():
         ]
     )
 
-    # 3. AI Mail Agent
+    # 3. AI Mail Agent (starts on new page as requested)
     add_project_entry(
         "AI Mail Agent — AI Developer",
         "https://github.com/surajdantarao/AI-Mail-agent",
@@ -440,7 +448,8 @@ def build_resume():
             "Engineered an offline-capable email triage assistant parsing email streams, auto-summarizing messages, and generating contextual draft replies.",
             "Integrated Google Workspace APIs (Gmail, Sheets, Drive) with local Ollama models ensuring zero data leakage and 100% private data processing.",
             "Streamlined inbound inbox processing, decreasing routine email management time by 65%."
-        ]
+        ],
+        page_break_before=True
     )
 
     # 4. Guest Lecture & Visitor Management System
